@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "949122107865",
+    "firebase_url": "https://my-medical-journal-seviien.firebaseio.com",
+    "project_id": "my-medical-journal-seviien",
+    "storage_bucket": "my-medical-journal-seviien.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949122107865:android:4656a9c85ac317bf5ef1c8",
+        "android_client_info": {
+          "package_name": "com.seviien.mymedicaljournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949122107865-aj2pdojl3dp00u9frplkec1cqmtmp3ko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRPiXu5kejj-yUePS0AVg8XugONbmUhCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949122107865-aj2pdojl3dp00u9frplkec1cqmtmp3ko.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
