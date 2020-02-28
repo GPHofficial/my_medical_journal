@@ -1,13 +1,24 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_analytics/observer.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
+
+  
+
+  static FirebaseAnalytics analytics = FirebaseAnalytics();
+  static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'My Medical Journal',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -20,13 +31,25 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(
+        title: 'My Medical Journal',
+        analytics: analytics,
+        observer: observer
+        ),
+
+      navigatorObservers: [
+        FirebaseAnalyticsObserver(analytics: analytics),
+      ],
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  MyHomePage({Key key, this.title, this.analytics, this.observer}) : super(key: key);
+
+  final String title;
+  final FirebaseAnalytics analytics;
+  final FirebaseAnalyticsObserver observer;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -37,14 +60,41 @@ class MyHomePage extends StatefulWidget {
   // used by the build method of the State. Fields in a Widget subclass are
   // always marked "final".
 
-  final String title;
-
   @override
-  _MyHomePageState createState() => _MyHomePageState();
+  _MyHomePageState createState() => _MyHomePageState(this.analytics,this.observer);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+  _MyHomePageState(this.analytics, this.observer);
+
+  final GoogleSignIn _googleSignIn = GoogleSignIn();
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  final FirebaseAnalyticsObserver observer;
+  final FirebaseAnalytics analytics;
+  String _counter = "You are not signed in";
+  
+
+  Future<void> _logInUser() async {
+    await analytics.logAppOpen();
+  }
+
+  Future<FirebaseUser> _handleSignIn() async {
+    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+
+// ().then((FirebaseUser user) => print(user)).catchError((e) => print(e))
+    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    setState(() {
+      _counter = "Signed in as " + user.displayName;
+    });
+    return user;
+  }
 
   void _incrementCounter() {
     setState(() {
@@ -53,7 +103,7 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
+      // _counter++;
     });
   }
 
@@ -91,21 +141,25 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'You have pushed the button this many times:',
-            ),
+            // Text(
+            //   'You have pushed the button this many times:',
+            // ),
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.display1,
             ),
+            MaterialButton(
+              child: const Text('Sign In with Google'),
+              onPressed: _handleSignIn,
+            ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: _incrementCounter,
+      //   tooltip: 'Increment',
+      //   child: Icon(Icons.add),
+      // ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
 }

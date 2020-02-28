@@ -2,6 +2,11 @@
 
 My Medical Journal, a Project by Team SEVIIEN
 
+## Requirement
+
+ - flutter doctor
+ - Android Level 28 (Android 9)
+
 ## Getting Started
 
 This project is a starting point for a Flutter application.

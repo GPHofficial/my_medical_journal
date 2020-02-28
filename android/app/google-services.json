@@ -8,12 +8,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:949122107865:android:4656a9c85ac317bf5ef1c8",
+        "mobilesdk_app_id": "1:949122107865:android:d9a49c6032e181805ef1c8",
         "android_client_info": {
-          "package_name": "com.seviien.mymedicaljournal"
+          "package_name": "com.seviien.my_medical_journal"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "949122107865-8pbr7l8qh0rjfgl510g187s5jj1k0ctu.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seviien.my_medical_journal",
+            "certificate_hash": "5779ab21cbc075d1d52204801213ca8c20cbd6cd"
+          }
+        },
         {
           "client_id": "949122107865-aj2pdojl3dp00u9frplkec1cqmtmp3ko.apps.googleusercontent.com",
           "client_type": 3
@@ -30,6 +38,57 @@
             {
               "client_id": "949122107865-aj2pdojl3dp00u9frplkec1cqmtmp3ko.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "949122107865-eiir06frho5ipovhsas255c4svtt285m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seviien.mymedicaljournal"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:949122107865:android:4656a9c85ac317bf5ef1c8",
+        "android_client_info": {
+          "package_name": "com.seviien.mymedicaljournal"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "949122107865-in8ko9hbho2n76q7apkjskhe7iiqela3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.seviien.mymedicaljournal",
+            "certificate_hash": "5779ab21cbc075d1d52204801213ca8c20cbd6cd"
+          }
+        },
+        {
+          "client_id": "949122107865-aj2pdojl3dp00u9frplkec1cqmtmp3ko.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDRPiXu5kejj-yUePS0AVg8XugONbmUhCY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "949122107865-aj2pdojl3dp00u9frplkec1cqmtmp3ko.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "949122107865-eiir06frho5ipovhsas255c4svtt285m.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.seviien.mymedicaljournal"
+              }
             }
           ]
         }
