@@ -1,4 +1,4 @@
-# My Medical_Journal 
+# My Medical Journal 
 ![Test, Build and Release apk](https://github.com/GPHofficial/my_medical_journal/workflows/Test,%20Build%20and%20Release%20apk/badge.svg?branch=master)
 
 My Medical Journal, a Project by Team SEVIIEN
