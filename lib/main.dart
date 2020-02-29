@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
 
   static FirebaseAnalytics analytics = FirebaseAnalytics();
   static FirebaseAnalyticsObserver observer = FirebaseAnalyticsObserver(analytics: analytics);
+  static Firestore firestore = Firestore();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +36,8 @@ class MyApp extends StatelessWidget {
       home: MyHomePage(
         title: 'My Medical Journal',
         analytics: analytics,
-        observer: observer
+        observer: observer,
+        firestore: firestore,
         ),
 
       navigatorObservers: [
@@ -45,11 +48,12 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title, this.analytics, this.observer}) : super(key: key);
+  MyHomePage({Key key, this.title, this.analytics, this.observer, this.firestore}) : super(key: key);
 
   final String title;
   final FirebaseAnalytics analytics;
   final FirebaseAnalyticsObserver observer;
+  final Firestore firestore;
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -61,38 +65,52 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   @override
-  _MyHomePageState createState() => _MyHomePageState(this.analytics,this.observer);
+  _MyHomePageState createState() => _MyHomePageState(this.analytics,this.observer,this.firestore);
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  _MyHomePageState(this.analytics, this.observer);
+  _MyHomePageState(this.analytics, this.observer,this.firestore);
+  
 
   final GoogleSignIn _googleSignIn = GoogleSignIn();
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final Firestore _firestore = Firestore.instance;
 
   final FirebaseAnalyticsObserver observer;
   final FirebaseAnalytics analytics;
+  final Firestore firestore;
+
   String _counter = "You are not signed in";
+
+
+
+
   
-
-  Future<void> _logInUser() async {
-    await analytics.logAppOpen();
-  }
-
   Future<FirebaseUser> _handleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
     final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    _firestore.collection('books').document().setData({ 'title': 'title', 'author': 'author' });
+    _firestore.collection('books').where("title", isEqualTo: "title").snapshots().listen((data) => data.documents.forEach((doc) => print(doc["author"])));
+    _firestore.collection('books').document('CqHHoQpZ0rCv9EUDCz7j').get().then((DocumentSnapshot ds) {
+      // use ds as a snapshot
+      ds.data.forEach((id,doc) => print(id + " " + doc["author"]));
+    });
+
 
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
+    await analytics.logAppOpen();
+
 // ().then((FirebaseUser user) => print(user)).catchError((e) => print(e))
     final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    
     setState(() {
       _counter = "Signed in as " + user.displayName;
     });
+    
     return user;
   }
 
