@@ -2,6 +2,7 @@
 import 'dart:async';
 
 // Flutter Packages
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 
 // Flutter Theme
@@ -12,6 +13,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 // Firebase Firestore (NoSQL Database)
 import 'package:cloud_firestore/cloud_firestore.dart';
+
+//Firebase User
+import 'package:firebase_auth/firebase_auth.dart';
 
 
 class MenuPage extends StatefulWidget {
@@ -43,7 +47,7 @@ class _MenuPageState extends State<MenuPage> {
   final FirebaseAnalytics analytics;
   final Firestore firestore;
 
-  String _counter = "You are not signed in";
+  bool _firebaseCheckStatus = null;
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -65,24 +69,97 @@ class _MenuPageState extends State<MenuPage> {
     )) ?? false;
   }
   
-  void _handleSignIn() async {
+  Future<void> _firestoreCheck() async {
     
-    //Create
-    _firestore.collection('books').document().setData({ 'title': 'title', 'author': 'author' });
-    //Search
-    _firestore.collection('books').where("title", isEqualTo: "title").snapshots().listen((data) => data.documents.forEach((doc) => print(doc["author"])));
-    //Get
-    _firestore.collection('books').document('CqHHoQpZ0rCv9EUDCz7j').get().then((DocumentSnapshot ds) {
-      // use ds as a snapshot
-      ds.data.forEach((id,doc) => print(id + " " + doc["author"]));
-    });
-    //List
-    //Update
-    //Delete
+    // For reference: 
+    // https://pub.dev/packages/cloud_firestore#-example-tab-
+    // https://pub.dev/documentation/cloud_firestore/latest/cloud_firestore/cloud_firestore-library.html
 
+    //Create
+    DocumentReference generatedDocRef = await _firestore.collection('books').add({ 'title': 'title', 'author': 'author' }).catchError((e) => 
+      setState(() {
+        _firebaseCheckStatus = false;
+      })
+    );
+    String generatedId = generatedDocRef.documentID;
+    print("Created DocumentId: " + generatedId);
+
+    //Search
+    QuerySnapshot results = await _firestore.collection('books').where("title", isEqualTo: "title").getDocuments().catchError((e) => 
+      setState(() {
+        _firebaseCheckStatus = false;
+      })
+    );;
+    results.documents.forEach((doc) => {
+        if(doc.documentID == generatedId){
+          print("Search DocumentId found: " + generatedId)
+        }else{
+          setState(() {
+            _firebaseCheckStatus = false;
+          })
+        }
+    });
+
+    //Listen (Runs whenever there's changes to documents)
+    // _firestore.collection('books').where("title", isEqualTo: "title").snapshots().listen((data) => 
+    //     data.documents.forEach((doc) => {
+    //       if(doc.documentID == generatedId){
+    //         print("Listen DocumentId found: " + generatedId)
+    //       }
+    //     })
+    //   );
+
+    //Get
+    await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
+      if(ds.documentID == generatedId && ds.data != null){
+        print("Get DocumentId found: " + generatedId);
+      }else{
+        setState(() {
+          _firebaseCheckStatus = false;
+        });
+      }
+    }).catchError((e) => 
+      setState(() {
+        _firebaseCheckStatus = false;
+      })
+    );
+    
+    
+    // //Update
+    await _firestore.collection('books').document(generatedId).updateData({'author': 'not author'});
+    //Update Check
+    await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
+      if(ds.documentID == generatedId){
+        if(ds.data['author'] == "not author"){
+          print("Updated DocumentId found: " + generatedId);
+        }else{
+          setState(() {
+          _firebaseCheckStatus = false;
+          });
+        }
+      }
+    }).catchError((e) => 
+      setState(() {
+        _firebaseCheckStatus = false;
+      })
+    );
+
+    // //Delete
+    await _firestore.collection('books').document(generatedId).delete();
+    //Delete Check
+    await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
+      if(ds.data != null){
+        setState(() {
+          _firebaseCheckStatus = false;
+        });
+      }else{
+        print("Deleted DocumentId: " + generatedId);
+      }
+    });
 
     setState(() {
-      // _counter = "Signed in as " + user.displayName;
+      if(_firebaseCheckStatus == null)
+        _firebaseCheckStatus = true;
     });
     
   }
@@ -101,45 +178,57 @@ class _MenuPageState extends State<MenuPage> {
         // the App.build method, and use it to set our appbar title.
         title: Text(widget.title),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
+      body: Builder(
+        builder: (context) => 
+          GridView.count(
+          // Create a grid with 2 columns. If you change the scrollDirection to
+          // horizontal, this produces 2 rows.
+          crossAxisCount: 2,
+          // Generate 100 widgets that display their index in the List.
           children: <Widget>[
-            // Text(
-            //   'You have pushed the button this many times:',
-            // ),
-            // Text(
-            //   '$_counter',
-            //   style: Theme.of(context).textTheme.display1,
-            // ),
-            // MaterialButton(
-            //   child: const Text('Sign In with Google'),
-            //   onPressed: _handleSignIn,
-            // ),
-          ],
-        ),
-      ),
+            RaisedButton(
+              child: const Text('Medication'),
+              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+            ),
+            RaisedButton(
+              child: const Text('Appointment'),
+              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+            ),
+            RaisedButton(
+              child: const Text('Clinics'),
+              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+            ),
+            RaisedButton(
+              child: const Text('Health Vitals'),
+              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+            ),
+            RaisedButton(
+              child: const Text('Logout'),
+              onPressed: () {
+                FirebaseAuth.instance.signOut();
+                Navigator.pushNamed(context,"/login",arguments:{this.analytics});
+              },
+            ),RaisedButton(
+              child: const Text('Check Firestore'),
+              onPressed: () async {
+                await _firestoreCheck();
+                if(_firebaseCheckStatus != null){
+                  SnackBar snackBar = SnackBar(content: Text( _firebaseCheckStatus ? 
+                    'Firestore check successful': 
+                    'Firestore Check Failed')
+                  );
+                  Scaffold.of(context).showSnackBar(snackBar);
+                }
+              },
+            ),
+          ]
+        )
       // floatingActionButton: FloatingActionButton(
       //   onPressed: _incrementCounter,
       //   tooltip: 'Increment',
       //   child: Icon(Icons.add),
       // ), // This trailing comma makes auto-formatting nicer for build methods.
-    );
+    ));
+    
   }
 }

@@ -146,6 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Sign in failed')
                   );
                   Scaffold.of(context).showSnackBar(snackBar);
+                  if(success == false) return;
                   Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
                 }
                 ),
@@ -159,6 +160,7 @@ class _LoginPageState extends State<LoginPage> {
                       'Sign in failed')
                     );
                     Scaffold.of(context).showSnackBar(snackBar);
+                    if(success == false) return;
                     Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
                   },
                 ),
