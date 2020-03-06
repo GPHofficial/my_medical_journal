@@ -17,6 +17,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 //Pages
 import 'menu.dart';
 import 'account/login.dart';
+import 'UI/medication_tracker.dart';
 
 
 
@@ -91,5 +92,6 @@ void main() async {
   final MyApp myApp = MyApp(
     initialRoute: isLogged ? '/login' : '/menu',
   );
-  runApp(myApp);
+  //runApp(myApp);
+  runApp(new MaterialApp(home : new MedicationTracker(),));
 }
