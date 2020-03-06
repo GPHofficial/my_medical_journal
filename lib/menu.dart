@@ -16,7 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Firebase User
 import 'package:firebase_auth/firebase_auth.dart';
-
+import 'pages/medication_tracker.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -188,7 +188,7 @@ class _MenuPageState extends State<MenuPage> {
           children: <Widget>[
             RaisedButton(
               child: const Text('Medication'),
-              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationTracker())),
             ),
             RaisedButton(
               child: const Text('Appointment'),

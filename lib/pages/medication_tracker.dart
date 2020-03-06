@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'add_medication.dart';
 
 
 class MedicationTracker extends StatefulWidget {
@@ -13,6 +14,8 @@ class MedicationTrackerState extends State<MedicationTracker> {
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      resizeToAvoidBottomInset: false, // set it to false
+      //body: SingleChildScrollView(child: YourBody()),
       appBar: new AppBar(
         backgroundColor: Colors.green,
         flexibleSpace: new Container(
@@ -83,8 +86,9 @@ class MedicationTrackerState extends State<MedicationTracker> {
           ],
         ),
       ),
+
       floatingActionButton: FloatingActionButton(
-        onPressed: () => print("Plus Tapped"),
+        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new AddMedication())),
         tooltip: 'Increment Counter',
         backgroundColor: Colors.green,
         child: const Icon(Icons.add),
