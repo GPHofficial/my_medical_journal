@@ -3,17 +3,15 @@ import '../entities/medication.dart';
 import 'medication_tracker.dart';
 
 class AddMedication extends StatefulWidget {
+  final _newMedication = new Medication();
   @override
   State createState() => AddMedicationState();
 }
 
 class AddMedicationState extends State<AddMedication> {
   final _formKey = GlobalKey<FormState>();
-  String _name;
-  String _nickname;
-  int _dosage;
-  int _quantity;
-  String _freq;
+  String dropdownValue = 'One';
+  var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +42,9 @@ class AddMedicationState extends State<AddMedication> {
                       if (input.isEmpty) return "Enter Name";
                       return null;
                     },
-                    onSaved: (input) => _name = input,
+                    onSaved:
+                        (input) =>
+                        widget._newMedication.setName(input),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -54,7 +54,9 @@ class AddMedicationState extends State<AddMedication> {
                       if (input.isEmpty) return "Enter Nickname";
                       return null;
                     },
-                    onSaved: (input) => _nickname = input,
+                    onSaved: (input){
+                        widget._newMedication.setNickname(input);
+                    },
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -68,7 +70,8 @@ class AddMedicationState extends State<AddMedication> {
                         return "Enter Dosage(Only Numeric)";
                       return null;
                     },
-                    onSaved: (input) => _dosage = int.parse(input),
+                    onSaved: (input) =>
+                        widget._newMedication.setDosage(int.parse(input)),
                   ),
                   TextFormField(
                     decoration: InputDecoration(
@@ -82,32 +85,45 @@ class AddMedicationState extends State<AddMedication> {
                         return "Enter Amount Bought(Only Numeric)";
                       return null;
                     },
-                    onSaved: (input) => _quantity = int.parse(input),
+                    onSaved: (input) =>
+                        widget._newMedication.setQuantity(int.parse(input)),
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-
+                      Text("Enter Frequency of Medication(Daily):               ",style:TextStyle(color:Colors.black54,fontSize: 16)),
                       DropdownButton<String>(
-                        hint:Text("Number Of Times Per Day"),
-                        items: <String>['1', '2', '3', '4'].map((String value) {
-                          return new DropdownMenuItem<String>(
+                        value: dropdownValue,
+                        icon: Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.black54),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.green,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            dropdownValue = newValue;
+                           widget._newMedication.setFrequency(strtoint[dropdownValue]);
 
+                          });
+                        },
+                        items: <String>['One', 'Two', 'Three', 'Four']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
                             value: value,
-                            child: new Text(value),
+                            child: Text(value),
                           );
                         }).toList(),
-                        onChanged:(value) => _freq = value,
                       ),
-
                     ],
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       Padding(
-                        padding: new EdgeInsets.all(8.0),
+                        padding: new EdgeInsets.all(0.0),
                         child: RaisedButton(
                           color: Colors.green,
                           elevation: 2,
@@ -132,11 +148,7 @@ class AddMedicationState extends State<AddMedication> {
   void _submit() {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
-      print(_name);
-      print(_nickname);
-      print(_dosage);
-      print(_quantity);
-      print(_freq);
+      widget._newMedication.disp();
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationTracker()));
     }

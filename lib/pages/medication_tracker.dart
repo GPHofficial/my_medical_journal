@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'add_medication.dart';
 
-
 class MedicationTracker extends StatefulWidget {
   @override
   State createState() => new MedicationTrackerState();
@@ -26,20 +25,15 @@ class MedicationTrackerState extends State<MedicationTracker> {
           ),
         ),
         bottom: PreferredSize(
-            child: new Container(
-
-                ),
-            preferredSize: Size(100, 100)),
-        title: new Center(
-          child: new Text(
-            "Medication Tracker",
-            style: new TextStyle(
-              color: Colors.white,
-              fontSize: 30,
-              fontWeight: FontWeight.bold,
-              fontFamily: 'OpenSans'
+            child: new Container(), preferredSize: Size(100, 100)),
+        title: new Row(
+          children: <Widget>[
+            new Text(
+              "Medication Tracker",
+              style: new TextStyle(
+                  color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),
             ),
-          ),
+          ],
         ),
       ),
       body: new Material(
@@ -63,7 +57,7 @@ class MedicationTrackerState extends State<MedicationTracker> {
                     return new Center(
                       child: new Container(
                         width: 400,
-                        height: 100,
+                        height: 150,
                         child: new Card(
                           elevation: 10,
                           shape: RoundedRectangleBorder(
@@ -74,8 +68,14 @@ class MedicationTrackerState extends State<MedicationTracker> {
                             onTap: () {
                               print('Card tapped.');
                             },
-                            child: Container(
-                              child: new Text(litems[index],style:new TextStyle(fontFamily: 'OpenSans'),)
+                            child: Column(
+                              children:<Widget>[
+                                Text("Medication Name",style: TextStyle(color:Colors.black54,fontSize:20,fontWeight: FontWeight.bold,fontFamily: "OpenSans"),
+                                ),
+                            Text("Medication Nickname",style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
+                            ),
+
+                              ],
                             ),
                           ),
                         ),
@@ -88,7 +88,8 @@ class MedicationTrackerState extends State<MedicationTracker> {
       ),
 
       floatingActionButton: FloatingActionButton(
-        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new AddMedication())),
+        onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+            builder: (BuildContext context) => new AddMedication())),
         tooltip: 'Increment Counter',
         backgroundColor: Colors.green,
         child: const Icon(Icons.add),
