@@ -93,6 +93,6 @@ void main() async {
   final MyApp myApp = MyApp(
     initialRoute: isLogged ? '/login' : '/menu',
   );
-  //runApp(myApp);
-  runApp(new MaterialApp(home : new AddMedication(),));
+  runApp(myApp);
+  //runApp(new MaterialApp(home : new MedicationTracker(),));
 }
