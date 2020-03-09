@@ -48,7 +48,7 @@ class _MenuPageState extends State<MenuPage> {
   final FirebaseAnalytics analytics;
   final Firestore firestore;
 
-  bool _firebaseCheckStatus = null;
+  int _firebaseCheckStatus = 0;
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -72,6 +72,8 @@ class _MenuPageState extends State<MenuPage> {
   
   Future<void> _firestoreCheck() async {
     
+
+
     // For reference: 
     // https://pub.dev/packages/cloud_firestore#-example-tab-
     // https://pub.dev/documentation/cloud_firestore/latest/cloud_firestore/cloud_firestore-library.html
@@ -79,27 +81,37 @@ class _MenuPageState extends State<MenuPage> {
     //Create
     DocumentReference generatedDocRef = await _firestore.collection('books').add({ 'title': 'title', 'author': 'author' }).catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = false;
+        _firebaseCheckStatus = -1;
       })
     );
+
+
     String generatedId = generatedDocRef.documentID;
     print("Created DocumentId: " + generatedId);
 
     //Search
     QuerySnapshot results = await _firestore.collection('books').where("title", isEqualTo: "title").getDocuments().catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = false;
+        _firebaseCheckStatus = -1;
       })
-    );;
-    results.documents.forEach((doc) => {
-        if(doc.documentID == generatedId){
-          print("Search DocumentId found: " + generatedId)
-        }else{
-          setState(() {
-            _firebaseCheckStatus = false;
-          })
-        }
-    });
+    );
+
+    List<DocumentSnapshot> docList = results.documents.toList();
+    DocumentSnapshot value = docList.firstWhere(
+      (doc){
+        return doc.documentID == generatedId;
+      }, 
+      orElse: () => null
+    );
+
+
+    if(value==null){
+      setState(() {
+        _firebaseCheckStatus = -1;
+      });
+    }
+
+
 
     //Listen (Runs whenever there's changes to documents)
     // _firestore.collection('books').where("title", isEqualTo: "title").snapshots().listen((data) => 
@@ -116,14 +128,15 @@ class _MenuPageState extends State<MenuPage> {
         print("Get DocumentId found: " + generatedId);
       }else{
         setState(() {
-          _firebaseCheckStatus = false;
+          _firebaseCheckStatus = -1;
         });
       }
     }).catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = false;
+        _firebaseCheckStatus = -1;
       })
     );
+
     
     
     // //Update
@@ -135,13 +148,13 @@ class _MenuPageState extends State<MenuPage> {
           print("Updated DocumentId found: " + generatedId);
         }else{
           setState(() {
-          _firebaseCheckStatus = false;
+          _firebaseCheckStatus = -1;
           });
         }
       }
     }).catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = false;
+        _firebaseCheckStatus = -1;
       })
     );
 
@@ -151,17 +164,17 @@ class _MenuPageState extends State<MenuPage> {
     await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
       if(ds.data != null){
         setState(() {
-          _firebaseCheckStatus = false;
+          _firebaseCheckStatus = -1;
         });
       }else{
         print("Deleted DocumentId: " + generatedId);
       }
     });
 
-    setState(() {
-      if(_firebaseCheckStatus == null)
-        _firebaseCheckStatus = true;
-    });
+    if(_firebaseCheckStatus == 0)
+      setState(() {
+          _firebaseCheckStatus = 1;
+      });
     
   }
 
@@ -228,8 +241,8 @@ class _MenuPageState extends State<MenuPage> {
               onPressed: () async {
                 await _firestoreCheck();
                 if(_firebaseCheckStatus != null){
-                  SnackBar snackBar = SnackBar(content: Text( _firebaseCheckStatus ? 
-                    'Firestore check successful': 
+                  SnackBar snackBar = SnackBar(content: Text( _firebaseCheckStatus == 1 ? 
+                    'Firestore Check Pass': 
                     'Firestore Check Failed')
                   );
                   Scaffold.of(context).showSnackBar(snackBar);
