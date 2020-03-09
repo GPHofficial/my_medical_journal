@@ -43,6 +43,7 @@ class _MenuPageState extends State<MenuPage> {
   _MenuPageState(this.analytics, this.firestore);
   
   final Firestore _firestore = Firestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final FirebaseAnalytics analytics;
   final Firestore firestore;
@@ -164,8 +165,22 @@ class _MenuPageState extends State<MenuPage> {
     
   }
 
+  Future<void> syncUserData() async{
+    final FirebaseUser currentUser = await _auth.currentUser();
+    dynamic userData = {
+      "info": {
+        "email": currentUser.email.length > 0 ? currentUser.email : "",
+        "name": currentUser.displayName.length > 0 ? currentUser.displayName : "",
+        "picture": currentUser.photoUrl.length > 0 ? currentUser.photoUrl : "",
+      }
+    };
+    _firestore.collection('users').document(currentUser.uid).setData(userData,merge: true);
+  }
   @override
   Widget build(BuildContext context) {
+
+    syncUserData();
+    
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //

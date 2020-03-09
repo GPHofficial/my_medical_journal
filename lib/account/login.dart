@@ -46,22 +46,7 @@ class _LoginPageState extends State<LoginPage> {
   bool success = false;
   String name = "";
 
-  void _handleGoogleSignInBtn() {
-      analytics.logLogin(loginMethod:"LoginAttempt-Google");
-      _handleGoogleSignIn().then((FirebaseUser user){
-          analytics.setUserId(user.uid);
-          analytics.logLogin(loginMethod:"LoginSuccess-Google");
-          setState(() {
-            success = true;
-            name = user.displayName;
-          });
-      }).catchError((e){ 
-          analytics.logLogin(loginMethod:"LoginFailure-Google");
-          setState(() {
-            success = false;
-          });
-      });
-  }
+
 
    void _handleGuestSignInBtn() async {
       await analytics.logLogin(loginMethod:"LoginAttempt-Guest");
@@ -125,6 +110,21 @@ class _LoginPageState extends State<LoginPage> {
     return user;
   }
 
+    Future<bool> _handleGoogleSignInBtn() async{
+      analytics.logLogin(loginMethod:"LoginAttempt-Google");
+      FirebaseUser user = await _handleGoogleSignIn().catchError((e){ 
+          analytics.logLogin(loginMethod:"LoginFailure-Google");
+          return false;
+      });
+      
+      analytics.setUserId(user.uid);
+      analytics.logLogin(loginMethod:"LoginSuccess-Google");
+      setState(() {
+        name = user.displayName;
+      });
+      return true;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -138,8 +138,8 @@ class _LoginPageState extends State<LoginPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 GoogleSignInButton(
-                  onPressed: () {
-                  _handleGoogleSignInBtn();
+                  onPressed: () async {
+                  bool success = await _handleGoogleSignInBtn();
                   if(success == null) return;
                   SnackBar snackBar = SnackBar(content: Text( success ? 
                       'Successfully signed in, ' +  name : 
@@ -150,20 +150,20 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
                 }
                 ),
-                RaisedButton(
-                  child: const Text('Use as Guest'),
-                  onPressed: () {
-                    _handleGuestSignInBtn();
-                    if(success == null) return;
-                    SnackBar snackBar = SnackBar(content: Text( success ? 
-                      'Successfully signed in as Guest.': 
-                      'Sign in failed')
-                    );
-                    Scaffold.of(context).showSnackBar(snackBar);
-                    if(success == false) return;
-                    Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
-                  },
-                ),
+                // RaisedButton(
+                //   child: const Text('Use as Guest'),
+                //   onPressed: () {
+                //     _handleGuestSignInBtn();
+                //     if(success == null) return;
+                //     SnackBar snackBar = SnackBar(content: Text( success ? 
+                //       'Successfully signed in as Guest.': 
+                //       'Sign in failed')
+                //     );
+                //     Scaffold.of(context).showSnackBar(snackBar);
+                //     if(success == false) return;
+                //     Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
+                //   },
+                // ),
               ],
             ),
         ),
