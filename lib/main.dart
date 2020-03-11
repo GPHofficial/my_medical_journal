@@ -19,6 +19,8 @@ import 'menu.dart';
 import 'account/login.dart';
 import 'pages/medication_tracker.dart';
 import 'pages/add_medication.dart';
+import 'pages/add_Appointment.dart';
+import 'pages/appointmentpage.dart';
 
 
 
@@ -53,7 +55,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(analytics: analytics,),
         '/menu': (context) => MenuPage(analytics: analytics,),
       },
-      
+
 
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
@@ -95,4 +97,5 @@ void main() async {
   );
   runApp(myApp);
   //runApp(new MaterialApp(home : new MedicationTracker(),));
+  //runApp(new MaterialApp(home : new Appointment().));
 }
