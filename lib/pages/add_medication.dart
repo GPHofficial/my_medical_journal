@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../entities/medication.dart';
 import 'medication_tracker.dart';
+import '../medication_manager.dart';
 
 class AddMedication extends StatefulWidget {
   final _newMedication = new Medication();
@@ -12,6 +13,7 @@ class AddMedicationState extends State<AddMedication> {
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'One';
   var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
+
 
   @override
   Widget build(BuildContext context) {
@@ -149,8 +151,11 @@ class AddMedicationState extends State<AddMedication> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       widget._newMedication.disp();
+      MedicationManager manager = new MedicationManager();
+       manager.addMedication(widget._newMedication.medication, widget._newMedication.nickname, widget._newMedication.dosage, widget._newMedication.frequency, widget._newMedication.quantity);
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationTracker()));
+
     }
   }
 

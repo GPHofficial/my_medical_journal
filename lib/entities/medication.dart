@@ -8,6 +8,7 @@ class Medication {
   List<String> _specialInfo;
 
   Medication();
+  Medication.withInfo(this._medication,this._nickname,this._reminders,this._dosage,this._frequency,this._quantity,this._specialInfo);
   String get medication=> _medication;
   String get nickname=> _nickname;
   int get dosage=> _dosage;
