@@ -19,7 +19,13 @@ import 'menu.dart';
 import 'account/login.dart';
 import 'pages/medication_tracker.dart';
 import 'pages/add_medication.dart';
+<<<<<<< HEAD
 import 'pages/view_medication.dart';
+=======
+import 'pages/add_Appointment.dart';
+import 'pages/appointmentpage.dart';
+
+>>>>>>> a7ea433f7003838a20af374ed68ac80b08196f3b
 
 
 class MyApp extends StatelessWidget {
@@ -53,7 +59,7 @@ class MyApp extends StatelessWidget {
         '/login': (context) => LoginPage(analytics: analytics,),
         '/menu': (context) => MenuPage(analytics: analytics,),
       },
-      
+
 
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
@@ -94,5 +100,6 @@ void main() async {
     initialRoute: isLogged ? '/login' : '/menu',
   );
   runApp(myApp);
-  //runApp(new MaterialApp(home : new ViewMedication(),));
+
 }
+
