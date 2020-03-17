@@ -44,6 +44,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  path_provider: "^0.4.0"
 
 
 # For information on the generic Dart part of this file, see the
@@ -52,6 +53,12 @@ dev_dependencies:
 # The following section is specific to Flutter.
 flutter:
 
+  fonts:
+      - family: OpenSans
+        fonts:
+          - asset: fonts/OpenSans.ttf
+          - asset: fonts/OpenSans-Bold.ttf
+            weight: 700
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.

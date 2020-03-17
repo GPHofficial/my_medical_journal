@@ -17,7 +17,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 //Pages
 import 'menu.dart';
 import 'account/login.dart';
-
+import 'pages/medication_tracker.dart';
+import 'pages/add_medication.dart';
+import 'pages/view_medication.dart';
 
 
 class MyApp extends StatelessWidget {
@@ -92,4 +94,5 @@ void main() async {
     initialRoute: isLogged ? '/login' : '/menu',
   );
   runApp(myApp);
+  //runApp(new MaterialApp(home : new ViewMedication(),));
 }
