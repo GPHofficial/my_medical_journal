@@ -16,7 +16,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Firebase User
 import 'package:firebase_auth/firebase_auth.dart';
-import 'pages/medication_tracker.dart';
+import 'package:my_medical_journal/pages/view_blood_pressure.dart';
+import 'package:my_medical_journal/pages/view_health_vitals.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -43,12 +44,11 @@ class _MenuPageState extends State<MenuPage> {
   _MenuPageState(this.analytics, this.firestore);
   
   final Firestore _firestore = Firestore.instance;
-  final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final FirebaseAnalytics analytics;
   final Firestore firestore;
 
-  int _firebaseCheckStatus = 0;
+  bool _firebaseCheckStatus = null;
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
@@ -72,8 +72,6 @@ class _MenuPageState extends State<MenuPage> {
   
   Future<void> _firestoreCheck() async {
     
-
-
     // For reference: 
     // https://pub.dev/packages/cloud_firestore#-example-tab-
     // https://pub.dev/documentation/cloud_firestore/latest/cloud_firestore/cloud_firestore-library.html
@@ -81,37 +79,27 @@ class _MenuPageState extends State<MenuPage> {
     //Create
     DocumentReference generatedDocRef = await _firestore.collection('books').add({ 'title': 'title', 'author': 'author' }).catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = -1;
+        _firebaseCheckStatus = false;
       })
     );
-
-
     String generatedId = generatedDocRef.documentID;
     print("Created DocumentId: " + generatedId);
 
     //Search
     QuerySnapshot results = await _firestore.collection('books').where("title", isEqualTo: "title").getDocuments().catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = -1;
+        _firebaseCheckStatus = false;
       })
-    );
-
-    List<DocumentSnapshot> docList = results.documents.toList();
-    DocumentSnapshot value = docList.firstWhere(
-      (doc){
-        return doc.documentID == generatedId;
-      }, 
-      orElse: () => null
-    );
-
-
-    if(value==null){
-      setState(() {
-        _firebaseCheckStatus = -1;
-      });
-    }
-
-
+    );;
+    results.documents.forEach((doc) => {
+        if(doc.documentID == generatedId){
+          print("Search DocumentId found: " + generatedId)
+        }else{
+          setState(() {
+            _firebaseCheckStatus = false;
+          })
+        }
+    });
 
     //Listen (Runs whenever there's changes to documents)
     // _firestore.collection('books').where("title", isEqualTo: "title").snapshots().listen((data) => 
@@ -128,15 +116,14 @@ class _MenuPageState extends State<MenuPage> {
         print("Get DocumentId found: " + generatedId);
       }else{
         setState(() {
-          _firebaseCheckStatus = -1;
+          _firebaseCheckStatus = false;
         });
       }
     }).catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = -1;
+        _firebaseCheckStatus = false;
       })
     );
-
     
     
     // //Update
@@ -148,13 +135,13 @@ class _MenuPageState extends State<MenuPage> {
           print("Updated DocumentId found: " + generatedId);
         }else{
           setState(() {
-          _firebaseCheckStatus = -1;
+          _firebaseCheckStatus = false;
           });
         }
       }
     }).catchError((e) => 
       setState(() {
-        _firebaseCheckStatus = -1;
+        _firebaseCheckStatus = false;
       })
     );
 
@@ -164,36 +151,22 @@ class _MenuPageState extends State<MenuPage> {
     await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
       if(ds.data != null){
         setState(() {
-          _firebaseCheckStatus = -1;
+          _firebaseCheckStatus = false;
         });
       }else{
         print("Deleted DocumentId: " + generatedId);
       }
     });
 
-    if(_firebaseCheckStatus == 0)
-      setState(() {
-          _firebaseCheckStatus = 1;
-      });
+    setState(() {
+      if(_firebaseCheckStatus == null)
+        _firebaseCheckStatus = true;
+    });
     
   }
 
-  Future<void> syncUserData() async{
-    final FirebaseUser currentUser = await _auth.currentUser();
-    dynamic userData = {
-      "info": {
-        "email": currentUser.email.length > 0 ? currentUser.email : "",
-        "name": currentUser.displayName.length > 0 ? currentUser.displayName : "",
-        "picture": currentUser.photoUrl.length > 0 ? currentUser.photoUrl : "",
-      }
-    };
-    _firestore.collection('users').document(currentUser.uid).setData(userData,merge: true);
-  }
   @override
   Widget build(BuildContext context) {
-
-    syncUserData();
-    
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
     //
@@ -216,7 +189,7 @@ class _MenuPageState extends State<MenuPage> {
           children: <Widget>[
             RaisedButton(
               child: const Text('Medication'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationTracker())),
+              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
             ),
             RaisedButton(
               child: const Text('Appointment'),
@@ -228,7 +201,7 @@ class _MenuPageState extends State<MenuPage> {
             ),
             RaisedButton(
               child: const Text('Health Vitals'),
-              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ViewHealthVitals())),
             ),
             RaisedButton(
               child: const Text('Logout'),
@@ -241,8 +214,8 @@ class _MenuPageState extends State<MenuPage> {
               onPressed: () async {
                 await _firestoreCheck();
                 if(_firebaseCheckStatus != null){
-                  SnackBar snackBar = SnackBar(content: Text( _firebaseCheckStatus == 1 ? 
-                    'Firestore Check Pass': 
+                  SnackBar snackBar = SnackBar(content: Text( _firebaseCheckStatus ? 
+                    'Firestore check successful': 
                     'Firestore Check Failed')
                   );
                   Scaffold.of(context).showSnackBar(snackBar);
