@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'add_Appointment.dart';
+import 'add_appointment.dart';
 
-class Appointment extends StatefulWidget {
+class AppointmentPage extends StatefulWidget {
   @override
-  State createState() => new AppointmentState();
+  State createState() => new AppointmentPageState();
 }
 
-class AppointmentState extends State<Appointment> {
-  List<String> litems = [];
+class AppointmentPageState extends State<AppointmentPage> {
+  List<String> items = [];
   final TextEditingController eCtrl = new TextEditingController();
 
   @override
@@ -43,14 +43,14 @@ class AppointmentState extends State<Appointment> {
             new TextField(
               controller: eCtrl,
               onSubmitted: (text) {
-                litems.add(text);
+                items.add(text);
                 eCtrl.clear();
                 setState(() {});
               },
             ),
             new Expanded(
               child: new GridView.builder(
-                  itemCount: litems.length,
+                  itemCount: items.length,
                   gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context, int index) {
@@ -74,7 +74,7 @@ class AppointmentState extends State<Appointment> {
                                 ),
                             Text("Appointment Time",style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
                             ),
-                            Text("Clinic Name",style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
+                            Text("Clinic Name",style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans")),
                               ],
                             ),
                           ),

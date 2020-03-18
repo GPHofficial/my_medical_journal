@@ -12,7 +12,7 @@ class Appointment {
   String get Time=> _Time;
   String get clinicName=> _c_name;
   String get appointmentName=> _a_name;
-  String get Documents=> _dcouments;
+  String get Documents=> _documents;
 
   List<String> get reminders=>_reminders;
   List<String> get specialInfo=>_specialInfo;
