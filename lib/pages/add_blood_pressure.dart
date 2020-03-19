@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:my_medical_journal/controller/bpController.dart';
 import '../entities/bloodPressure.dart';
 import 'view_blood_pressure.dart';
 import 'package:intl/intl.dart';
 
 class AddBloodPressure extends StatefulWidget{
-  final _newBloodPressure = new bloodPressure();
+  final _newBloodPressure = new BloodPressure();
   @override
   State createState() => AddBloodPressureState();
 }
@@ -98,6 +99,8 @@ class AddBloodPressureState extends State<AddBloodPressure>{
       String formattedDate = DateFormat('dd/MM').format(now);
       widget._newBloodPressure.setDate(formattedDate);
       widget._newBloodPressure.setTime(formattedTime);
+      //BpController addbp = new BpController();
+      //addbp.addbp(uid, widget._newBloodPressure.diastolic, widget._newBloodPressure.systolic, widget._newBloodPressure.heartRate, widget._newBloodPressure.date, widget._newBloodPressure.time);
       widget._newBloodPressure.disp();
 
       Navigator.of(context).push(new MaterialPageRoute(

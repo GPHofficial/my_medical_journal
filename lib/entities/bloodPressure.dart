@@ -1,11 +1,11 @@
-class bloodPressure {
+class BloodPressure {
   String _diastolic;
   String _systolic;
   String _heartRate;
   String _date;
   String _time;
 
-  bloodPressure();
+  BloodPressure();
 
   String get diastolic => _diastolic;
   String get systolic => _systolic;
