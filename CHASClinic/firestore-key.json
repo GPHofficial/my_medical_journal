@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "my-medical-journal-seviien",
+  "private_key_id": "4911cb8a8e8dfcdaedff20b68a41adaa999a6fea",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDP4eV4aFd/6KWD\nQCiUcZHgSG9UPPZ1sqVl6RfnOucreM7zsUz0dmRS/DmXncPmeT4TvgKM1hwLC+nA\nkn1NhCIJIBTUJfgXzJul+Ev3fXRK/RX16FwNo5RQryPHTyC4GPjsvIMfz8ZWQRDs\n7d4ZlVJsY3eYSZeOn327u8t0LK4Y7cSRBvV5hlBCQ5jKal2cwpgPJ7sKmyJ2EJ96\n5twiXhG6lgQ5pWdj0u8qWyrX6Xp/3I/nNW+s/u/n/7W+C2yhe6Wee7FQvTZ1qlR1\nY0n/jlsejlKIqlklYkmENvbjXj27BkZ1wXy/+yTY0bUIs2ceTy+yU1Heke5dOmDC\n3xk772nHAgMBAAECggEAWWdsMqwhUYvjPv7lVO5BECXm52IulvDlbF5into42Hvk\n+W57y7ltLTl3pWq++UyUc5Yo75wXxHJzrhPyWtekcas/+ft4Zvfiyu7t8Psd/DA7\ndR5hFKaQ32BrcUjpJ/PpfpsWg6RuxuLF3jfw6KzNHXtr0G16Bmc2gnpiJk0e9O3q\nKb8/pJu27wUivLPJCCNkAQM5Ax1hHSQVrX3B2aSjxoh6ECr/AjmckdLndE1Jb55q\nncikf9IcJXZ9IYvuDuoa9cuD1IaedND1HSlX672m/Uq+SXcvEAdITIaTmVb/3IgX\ni+cfZoSSzbLOaLgDWhHWuuOF8s1hDAvaAAJS82KFdQKBgQD5vR42NQaFguz2AQBU\n6ET1HNuxCeh71AnYuWrniDlmj2KomvmUQUjh4IC/l5PIgf2QP/fHo0s+pS4BBEcf\nFBKUmZh1d5xp/IH5nv3a0FZXeegwqC/fmg/bYNubXLRKg8wQ2Y5hXtlYJAa2kAGB\ncfxZbAy582pOnq7ADnJelXpOMwKBgQDVGCJyJdZb0YafNazP89yCJlfh9pOBGmNu\nNUCwF6OG99hGnoxMEaBPlo+t918RAtO4aVONW5vL0pnzd/CDD1UKUSVlPNHzvQGN\n4rjJDWPCRozb6mR2b58H1khHOPJtlPheSqK2VChb5GvqXwqkt7Kqaq1GT+7q6c14\n5Yp61C86HQKBgBBtf0pDjK1Fon7ALBxptveEsXLg2vkiRo+KCt02GciEUBIVN6un\n67poATAZMXB0FJDjlFH+jNmPFgqdFGyX7mz1+ZBokNJr+MTJz5sQL03LyBlDRvrn\ncHmW0ntSys1IBClrljETgyqIHCTwLhksvVPIhsHIoEqRp58clCtim8v/AoGAMtFf\nnZMybJEqJpu5S5pfUtZsDOItyRMO9UBT3eq1P8GpXSYAVT+62GASga1FiZv/+7F6\nkHJxVAk0V6CZxdeJMz2oylzXwOWpEjooUSIVUUZb3zIlpSz3YvoSIJIPFlz5Yhsw\ndITbXxa5OZpSwndgb02jZuo3EuSQ8Kzk+mfRn20CgYEA9DTe67DWGR1YG68C8dF3\nIWt1r53TG+DTp0vduInkAc9udEVZtx4zVX4KJ5tl9zDx9XZF77Do9xWcRaODtOKG\nIlBXpCT/hRD8JNfUnze2GqUEu8SO9AJY9s5XCuIJ+a9AdyoKOLCFIht9tyPVp804\nQoB5Ht0UsBDOMdHiIo4OeBs=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-a3njy@my-medical-journal-seviien.iam.gserviceaccount.com",
+  "client_id": "107605512877219511039",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-a3njy%40my-medical-journal-seviien.iam.gserviceaccount.com"
+}
