@@ -48,7 +48,6 @@ class MedicationTrackerState extends State<MedicationTracker> {
                 setState(() {});
               },
             ),
-
             new Expanded(
               child: new GridView.builder(
                   itemCount: litems.length,

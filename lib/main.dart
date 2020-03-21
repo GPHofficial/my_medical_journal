@@ -24,7 +24,6 @@ import 'pages/add_appointment.dart';
 import 'pages/appointmentpage.dart';
 
 
-
 class MyApp extends StatelessWidget {
 
   final String initialRoute;
@@ -97,6 +96,5 @@ void main() async {
     initialRoute: isLogged ? '/login' : '/menu',
   );
   runApp(myApp);
-
 }
 

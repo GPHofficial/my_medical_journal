@@ -155,7 +155,6 @@ class AddMedicationState extends State<AddMedication> {
        manager.addMedication(widget._newMedication.medication, widget._newMedication.nickname, widget._newMedication.dosage, widget._newMedication.frequency, widget._newMedication.quantity);
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationTracker()));
-
     }
   }
 

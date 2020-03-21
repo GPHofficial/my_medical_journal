@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../entities/appointment.dart';
-import 'appointment.dart';
+import 'appointmentpage.dart';
 
 class AddAppointment extends StatefulWidget {
   final _newAppointment = new Appointment();
@@ -11,7 +11,7 @@ class AddAppointment extends StatefulWidget {
 class AddAppointmentState extends State<AddAppointment> {
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'One';
-  var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
+  var strings = {'One':1,'Two':2,'Three':3,'Four':4};
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +123,7 @@ class AddAppointmentState extends State<AddAppointment> {
       _formKey.currentState.save();
       widget._newAppointment.disp();
       Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => new Appointment()));
+          builder: (BuildContext context) => new AppointmentPage()));
     }
   }
 
