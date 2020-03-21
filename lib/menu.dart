@@ -18,6 +18,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'pages/medication_tracker.dart';
 import 'pages/appointmentpage.dart';
+import 'pages/view_blood_pressure.dart';
+import 'pages/view_health_vitals.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -229,7 +231,7 @@ class _MenuPageState extends State<MenuPage> {
             ),
             RaisedButton(
               child: const Text('Health Vitals'),
-              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ViewHealthVitals())),
             ),
             RaisedButton(
               child: const Text('Logout'),
