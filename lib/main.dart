@@ -23,7 +23,6 @@ import 'pages/view_medication.dart';
 import 'pages/add_appointment.dart';
 import 'pages/appointmentpage.dart';
 
-
 class MyApp extends StatelessWidget {
 
   final String initialRoute;
