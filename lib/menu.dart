@@ -16,6 +16,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 //Firebase User
 import 'package:firebase_auth/firebase_auth.dart';
+import 'pages/clinic.dart';
 import 'pages/medication_tracker.dart';
 import 'pages/appointmentpage.dart';
 import 'pages/view_blood_pressure.dart';
@@ -227,7 +228,7 @@ class _MenuPageState extends State<MenuPage> {
             ),
             RaisedButton(
               child: const Text('Clinics'),
-              onPressed: () {Navigator.pushNamed(context,"/menu",arguments:{this.analytics});},
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Clinic())),
             ),
             RaisedButton(
               child: const Text('Health Vitals'),
