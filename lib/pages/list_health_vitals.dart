@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 
 import 'view_blood_pressure.dart';
 
-class ViewHealthVitals extends StatefulWidget{
+class HealthVitalsPage extends StatefulWidget{
   @override
-  State createState() => new ViewHealthVitalsState();
+  State createState() => new HealthVitalsPageState();
 }
 
-class ViewHealthVitalsState extends State<ViewHealthVitals>{
+class HealthVitalsPageState extends State<HealthVitalsPage>{
   @override
   Widget build(BuildContext context){
     return Scaffold(

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'add_medication.dart';
 
-class MedicationTracker extends StatefulWidget {
+class MedicationPage extends StatefulWidget {
   @override
-  State createState() => new MedicationTrackerState();
+  State createState() => new MedicationPageState();
 }
 
-class MedicationTrackerState extends State<MedicationTracker> {
+class MedicationPageState extends State<MedicationPage> {
   List<String> litems = [];
   final TextEditingController eCtrl = new TextEditingController();
 

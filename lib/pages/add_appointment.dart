@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../entities/appointment.dart';
-import 'appointmentpage.dart';
+import 'list_appointment.dart';
 
 class AddAppointment extends StatefulWidget {
   final _newAppointment = new Appointment();
