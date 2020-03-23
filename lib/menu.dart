@@ -11,21 +11,19 @@ import 'package:flutter/material.dart';
 // Firebase Analytics
 import 'package:firebase_analytics/firebase_analytics.dart';
 
-// Firebase Firestore (NoSQL Database)
-import 'package:cloud_firestore/cloud_firestore.dart';
-
 //Firebase User
 import 'package:firebase_auth/firebase_auth.dart';
-import 'pages/clinic.dart';
-import 'pages/medication_tracker.dart';
-import 'pages/appointmentpage.dart';
-import 'pages/view_blood_pressure.dart';
-import 'pages/view_health_vitals.dart';
+
+//Pages
+import 'pages/list_clinic.dart';
+import 'pages/list_medication.dart';
+import 'pages/list_appointment.dart';
+import 'pages/list_health_vitals.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
 
-  static Firestore firestore = Firestore();
+  
 
   final String title = "My Medical Journal";
   final FirebaseAnalytics analytics;
@@ -40,17 +38,16 @@ class MenuPage extends StatefulWidget {
   // always marked "final".
 
   @override
-  _MenuPageState createState() => _MenuPageState(this.analytics,firestore);
+  _MenuPageState createState() => _MenuPageState(this.analytics);
 }
 
 class _MenuPageState extends State<MenuPage> {
-  _MenuPageState(this.analytics, this.firestore);
+  _MenuPageState(this.analytics);
   
-  final Firestore _firestore = Firestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final FirebaseAnalytics analytics;
-  final Firestore firestore;
+  
 
   int _firebaseCheckStatus = 0;
 
@@ -74,129 +71,23 @@ class _MenuPageState extends State<MenuPage> {
     )) ?? false;
   }
   
-  Future<void> _firestoreCheck() async {
-    
-
-
-    // For reference: 
-    // https://pub.dev/packages/cloud_firestore#-example-tab-
-    // https://pub.dev/documentation/cloud_firestore/latest/cloud_firestore/cloud_firestore-library.html
-
-    //Create
-    DocumentReference generatedDocRef = await _firestore.collection('books').add({ 'title': 'title', 'author': 'author' }).catchError((e) => 
-      setState(() {
-        _firebaseCheckStatus = -1;
-      })
-    );
-
-
-    String generatedId = generatedDocRef.documentID;
-    print("Created DocumentId: " + generatedId);
-
-    //Search
-    QuerySnapshot results = await _firestore.collection('books').where("title", isEqualTo: "title").getDocuments().catchError((e) => 
-      setState(() {
-        _firebaseCheckStatus = -1;
-      })
-    );
-
-    List<DocumentSnapshot> docList = results.documents.toList();
-    DocumentSnapshot value = docList.firstWhere(
-      (doc){
-        return doc.documentID == generatedId;
-      }, 
-      orElse: () => null
-    );
-
-
-    if(value==null){
-      setState(() {
-        _firebaseCheckStatus = -1;
-      });
-    }
-
-
-
-    //Listen (Runs whenever there's changes to documents)
-    // _firestore.collection('books').where("title", isEqualTo: "title").snapshots().listen((data) => 
-    //     data.documents.forEach((doc) => {
-    //       if(doc.documentID == generatedId){
-    //         print("Listen DocumentId found: " + generatedId)
-    //       }
-    //     })
-    //   );
-
-    //Get
-    await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
-      if(ds.documentID == generatedId && ds.data != null){
-        print("Get DocumentId found: " + generatedId);
-      }else{
-        setState(() {
-          _firebaseCheckStatus = -1;
-        });
-      }
-    }).catchError((e) => 
-      setState(() {
-        _firebaseCheckStatus = -1;
-      })
-    );
-
-    
-    
-    // //Update
-    await _firestore.collection('books').document(generatedId).updateData({'author': 'not author'});
-    //Update Check
-    await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
-      if(ds.documentID == generatedId){
-        if(ds.data['author'] == "not author"){
-          print("Updated DocumentId found: " + generatedId);
-        }else{
-          setState(() {
-          _firebaseCheckStatus = -1;
-          });
-        }
-      }
-    }).catchError((e) => 
-      setState(() {
-        _firebaseCheckStatus = -1;
-      })
-    );
-
-    // //Delete
-    await _firestore.collection('books').document(generatedId).delete();
-    //Delete Check
-    await _firestore.collection('books').document(generatedId).get().then((DocumentSnapshot ds) {
-      if(ds.data != null){
-        setState(() {
-          _firebaseCheckStatus = -1;
-        });
-      }else{
-        print("Deleted DocumentId: " + generatedId);
-      }
-    });
-
-    if(_firebaseCheckStatus == 0)
-      setState(() {
-          _firebaseCheckStatus = 1;
-      });
-    
-  }
-
-  Future<void> syncUserData() async{
-    final FirebaseUser currentUser = await _auth.currentUser();
-    dynamic userData = {
-      "info": {
-        "email": currentUser.email.length > 0 ? currentUser.email : "",
-        "name": currentUser.displayName.length > 0 ? currentUser.displayName : "",
-        "picture": currentUser.photoUrl.length > 0 ? currentUser.photoUrl : "",
-      }
-    };
-    _firestore.collection('users').document(currentUser.uid).setData(userData,merge: true);
-  }
+ 
+  // Future<void> syncUserData() async{
+  //   final FirebaseUser currentUser = await _auth.currentUser();
+  //   dynamic userData = {
+  //     "info": {
+  //       "email": currentUser.email.length > 0 ? currentUser.email : "",
+  //       "name": currentUser.displayName.length > 0 ? currentUser.displayName : "",
+  //       "picture": currentUser.photoUrl.length > 0 ? currentUser.photoUrl : "",
+  //     }
+  //   };
+  //   _firestore.collection('users').document(currentUser.uid).setData(userData,merge: true);
+  // }
+  
   @override
   Widget build(BuildContext context) {
 
-    syncUserData();
+    // syncUserData();
     
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
@@ -220,7 +111,7 @@ class _MenuPageState extends State<MenuPage> {
           children: <Widget>[
             RaisedButton(
               child: const Text('Medication'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationTracker())),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationPage())),
             ),
             RaisedButton(
               child: const Text('Appointment'),
@@ -228,29 +119,17 @@ class _MenuPageState extends State<MenuPage> {
             ),
             RaisedButton(
               child: const Text('Clinics'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new Clinic())),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ClinicPage())),
             ),
             RaisedButton(
               child: const Text('Health Vitals'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ViewHealthVitals())),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HealthVitalsPage())),
             ),
             RaisedButton(
               child: const Text('Logout'),
               onPressed: () {
                 FirebaseAuth.instance.signOut();
                 Navigator.pushNamed(context,"/login",arguments:{this.analytics});
-              },
-            ),RaisedButton(
-              child: const Text('Check Firestore'),
-              onPressed: () async {
-                await _firestoreCheck();
-                if(_firebaseCheckStatus != null){
-                  SnackBar snackBar = SnackBar(content: Text( _firebaseCheckStatus == 1 ? 
-                    'Firestore Check Pass': 
-                    'Firestore Check Failed')
-                  );
-                  Scaffold.of(context).showSnackBar(snackBar);
-                }
               },
             ),
           ]

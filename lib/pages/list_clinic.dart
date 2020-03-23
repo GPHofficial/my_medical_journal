@@ -3,12 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class Clinic extends StatefulWidget {
+class ClinicPage extends StatefulWidget {
   @override
-  ClinicState createState() => ClinicState();
+  ClinicPageState createState() => ClinicPageState();
 }
 
-class ClinicState extends State<Clinic> {
+class ClinicPageState extends State<ClinicPage> {
   Completer<GoogleMapController> _controller = Completer();
 
   @override

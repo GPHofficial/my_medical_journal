@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../entities/medication.dart';
-import 'medication_tracker.dart';
+import 'list_medication.dart';
 import '../medication_manager.dart';
 
 class AddMedication extends StatefulWidget {
@@ -154,7 +154,7 @@ class AddMedicationState extends State<AddMedication> {
       MedicationManager manager = new MedicationManager();
        manager.addMedication(widget._newMedication.medication, widget._newMedication.nickname, widget._newMedication.dosage, widget._newMedication.frequency, widget._newMedication.quantity);
       Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => new MedicationTracker()));
+          builder: (BuildContext context) => new MedicationPage()));
     }
   }
 
