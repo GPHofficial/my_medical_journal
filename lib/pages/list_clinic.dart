@@ -2,6 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:my_medical_journal/controller/clinic_controller.dart';
+import 'package:my_medical_journal/entities/clinic.dart';
 
 class ClinicPage extends StatefulWidget {
   @override
@@ -10,7 +12,10 @@ class ClinicPage extends StatefulWidget {
 
 class ClinicPageState extends State<ClinicPage> {
   Completer<GoogleMapController> _controller = Completer();
+  ClinicController clinicController = new ClinicController();
 
+  Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  
   @override
   void initState() {
     super.initState();
@@ -44,6 +49,38 @@ class ClinicPageState extends State<ClinicPage> {
         ],
       ),
     );
+  }
+
+  void mapScroll() async{
+    setState(() {
+        markers =  <MarkerId, Marker>{};
+        
+      });
+
+    final GoogleMapController controller = await _controller.future;
+    LatLngBounds boundary = await controller.getVisibleRegion();
+
+    List<Clinic> clinics = await clinicController.queryClinicByLocation(boundary.northeast.latitude,boundary.northeast.longitude, 
+      boundary.southwest.latitude,boundary.southwest.longitude);
+
+
+    for(var clinic in clinics){
+      Marker newMarker = Marker(
+        markerId: MarkerId(clinic.HCI_NAME),
+        position: LatLng(clinic.LATITUDE, clinic.LONGITUDE),
+        infoWindow: InfoWindow(title: clinic.HCI_NAME),
+        icon: BitmapDescriptor.defaultMarkerWithHue(
+          BitmapDescriptor.hueViolet,
+        ),
+      );
+      MarkerId id = new MarkerId(clinic.getId());
+      setState(() {
+        markers[id] = newMarker;
+        
+      });
+    }
+    
+    
   }
 
   Widget _zoomminusfunction() {
@@ -266,16 +303,11 @@ class ClinicPageState extends State<ClinicPage> {
         mapType: MapType.normal,
         initialCameraPosition:
             CameraPosition(target: LatLng(1.3521, 103.8198), zoom: 12),
+        onCameraIdle: () => mapScroll(),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },
-        markers: {
-          newyork1Marker,
-          newyork2Marker,
-          sghMarker,
-          nuhMarker,
-          tmcMarker
-        },
+        markers: Set<Marker>.of(markers.values),
       ),
     );
   }

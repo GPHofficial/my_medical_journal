@@ -13,6 +13,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 
 //Firebase User
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:my_medical_journal/controller/user_controller.dart';
+import 'package:my_medical_journal/entities/user.dart';
 
 //Pages
 import 'pages/list_clinic.dart';
@@ -72,22 +74,22 @@ class _MenuPageState extends State<MenuPage> {
   }
   
  
-  // Future<void> syncUserData() async{
-  //   final FirebaseUser currentUser = await _auth.currentUser();
-  //   dynamic userData = {
-  //     "info": {
-  //       "email": currentUser.email.length > 0 ? currentUser.email : "",
-  //       "name": currentUser.displayName.length > 0 ? currentUser.displayName : "",
-  //       "picture": currentUser.photoUrl.length > 0 ? currentUser.photoUrl : "",
-  //     }
-  //   };
-  //   _firestore.collection('users').document(currentUser.uid).setData(userData,merge: true);
-  // }
+  Future<void> syncUserData() async{
+    final FirebaseUser currentUser = await _auth.currentUser();
+    UserController uc = new UserController();
+    uc.addOrUpdateUser(currentUser.uid, currentUser.displayName, currentUser.email, currentUser.photoUrl);
+  }
+
+  @override
+  initState() {
+    super.initState();
+    syncUserData();
+  }
   
   @override
   Widget build(BuildContext context) {
 
-    // syncUserData();
+    
     
     // This method is rerun every time setState is called, for instance as done
     // by the _incrementCounter method above.
