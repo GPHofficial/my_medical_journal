@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_medical_journal/controller/bpController.dart';
+import 'package:my_medical_journal/controller/vitals_controller.dart';
 import '../entities/bloodPressure.dart';
 import 'view_blood_pressure.dart';
 import 'package:intl/intl.dart';

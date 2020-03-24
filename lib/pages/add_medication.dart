@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_medical_journal/controller/medication_controller.dart';
 import '../entities/medication.dart';
 import 'list_medication.dart';
 import '../medication_manager.dart';
@@ -152,7 +153,20 @@ class AddMedicationState extends State<AddMedication> {
       _formKey.currentState.save();
       widget._newMedication.disp();
       MedicationManager manager = new MedicationManager();
-       manager.addMedication(widget._newMedication.medication, widget._newMedication.nickname, widget._newMedication.dosage, widget._newMedication.frequency, widget._newMedication.quantity);
+       
+      MedicationController medicationController = new MedicationController();
+      
+      // Medication medication = new Medication.set(
+      //   widget._newMedication.medication,
+      //   widget._newMedication.nickname,
+      //   null, // _reminders
+      //   widget._newMedication.dosage,
+      //   widget._newMedication.frequency,
+      //   widget._newMedication.quantity,
+      //   null, //special Info)
+      // );
+      medicationController.addMedication(widget._newMedication);
+      
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationPage()));
     }

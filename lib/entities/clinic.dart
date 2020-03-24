@@ -1,9 +1,9 @@
 import 'package:my_medical_journal/adapters/firestore.dart';
 import 'package:my_medical_journal/entities/entity_base.dart';
 
-class Clinic extends FirestoreAdapter implements EntityBase{
+class Clinic implements EntityBase{
 
-  String collectionName = "clinic";
+  static String collectionName = "clinic";
 
   String id;
   String ADDR_TYPE ;

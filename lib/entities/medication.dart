@@ -1,4 +1,10 @@
-class Medication {
+import 'package:my_medical_journal/adapters/firestore.dart';
+import 'package:my_medical_journal/entities/entity_base.dart';
+
+class Medication implements EntityBase{
+
+  static String collectionName = "medication";
+  String id;
   String _medication;
   String _nickname;
   List<String> _reminders;
@@ -8,7 +14,7 @@ class Medication {
   List<String> _specialInfo;
 
   Medication();
-  Medication.withInfo(this._medication,this._nickname,this._reminders,this._dosage,this._frequency,this._quantity,this._specialInfo);
+  Medication.set(this._medication,this._nickname,this._reminders,this._dosage,this._frequency,this._quantity,this._specialInfo);
   String get medication=> _medication;
   String get nickname=> _nickname;
   int get dosage=> _dosage;
@@ -17,6 +23,14 @@ class Medication {
 
   List<String> get reminders=>_reminders;
   List<String> get specialInfo=>_specialInfo;
+
+  void setId(String id){
+    this.id = id;
+  }
+
+  String getId(){
+    return this.id;
+  }
 
   void setName(String medication){
     this._medication = medication;
@@ -48,6 +62,31 @@ class Medication {
     print("Medication Quantity: "+_quantity.toString());
   }
 
+  Map<String,dynamic> getData(){
+    Map<String,dynamic> data = {
+      "medication": this._medication,
+      "nickname": this._nickname,
+      "dosage": this._dosage,
+      "frequency": this._frequency,
+      "quantity": this._quantity,
+      "reminders": this._reminders,
+      "specialInfo": this._specialInfo,
+    };
+    return data;
+  }
+
+  Medication.castFromMap(Map<String,dynamic> map){
+    this._medication = map["medication"];
+    this._nickname = map["nickname"];
+    this._dosage = map["dosage"];
+    this._frequency = map["frequency"];
+    this._quantity = map["quantity"];
+    this._reminders = map["reminders"];
+    this._specialInfo = map["specialInfo"];
+    this.id = map["id"];
+  }
+    
+  
 
 
 }
