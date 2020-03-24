@@ -36,6 +36,7 @@ dependencies:
   
   google_maps_flutter: ^0.5.11
   font_awesome_flutter: ^8.2.0
+  reflectable: any
 
   
   # The following adds the Cupertino Icons font to your application.

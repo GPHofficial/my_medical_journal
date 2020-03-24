@@ -6,7 +6,7 @@ class UserController{
   FirestoreAdapter<User> firestore;
 
   UserController(){
-     firestore = new FirestoreAdapter<User>();
+     firestore = new FirestoreAdapter<User>(User.collectionName);
   }
 
   void addOrUpdateUser(String id,String name, String email, String picture){

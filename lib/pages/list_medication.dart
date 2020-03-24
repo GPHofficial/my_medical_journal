@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_medical_journal/entities/medication.dart';
 import 'add_medication.dart';
 
 class MedicationPage extends StatefulWidget {
@@ -7,8 +8,14 @@ class MedicationPage extends StatefulWidget {
 }
 
 class MedicationPageState extends State<MedicationPage> {
-  List<String> litems = [];
+
+  
+  static List<String> litems = ["1","2","3"];
   final TextEditingController eCtrl = new TextEditingController();
+  
+  static updateMedicationItems(List<Medication> medicationList){
+    
+  }
 
   @override
   Widget build(BuildContext context) {
