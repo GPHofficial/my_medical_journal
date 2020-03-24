@@ -15,6 +15,16 @@ class Medication implements EntityBase{
 
   Medication();
   Medication.set(this._medication,this._nickname,this._reminders,this._dosage,this._frequency,this._quantity,this._specialInfo);
+  Medication.defaults(){
+    this.id = "";
+    this._medication = "";
+    this._nickname = "";
+    this._reminders = new List<String>();
+    this._dosage = 0;
+    this._frequency = 0;
+    this._quantity = 0;
+    this._specialInfo = new List<String>();
+  }
   String get medication=> _medication;
   String get nickname=> _nickname;
   int get dosage=> _dosage;
@@ -76,6 +86,7 @@ class Medication implements EntityBase{
   }
 
   Medication.castFromMap(Map<String,dynamic> map){
+    print(map);
     this._medication = map["medication"];
     this._nickname = map["nickname"];
     this._dosage = map["dosage"];

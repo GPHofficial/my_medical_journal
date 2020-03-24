@@ -5,15 +5,50 @@ import 'list_medication.dart';
 import '../medication_manager.dart';
 
 class AddMedication extends StatefulWidget {
-  final _newMedication = new Medication();
-  @override
-  State createState() => AddMedicationState();
+  AddMedication({Key key, this.generatedId}) : super(key: key);
+  final String generatedId;
+  Medication _newMedication = new Medication();
+  State createState() => AddMedicationState(this.generatedId);
 }
 
 class AddMedicationState extends State<AddMedication> {
+  AddMedicationState(this.generatedId);
+  String generatedId;
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'One';
   var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
+  var textEditingControllers = {
+    "name": new TextEditingController(),
+    "nickname": new TextEditingController(),
+    "dosage": new TextEditingController(),
+    "quantity": new TextEditingController(),
+  };
+
+  void loadMedicationData(String generatedId) async {
+    print(generatedId);
+    MedicationController medicationController = new MedicationController();
+    Medication retrievedMedication = await medicationController.getMedication(generatedId);
+    setState(() {
+      widget._newMedication = retrievedMedication;
+      textEditingControllers["name"].text = retrievedMedication.medication;
+      textEditingControllers["nickname"].text = retrievedMedication.nickname;
+      textEditingControllers["dosage"].text = retrievedMedication.dosage == null ? "" : retrievedMedication.dosage.toString();
+      textEditingControllers["quantity"].text = retrievedMedication.quantity == null ? "" : retrievedMedication.dosage.toString();
+    });
+  }
+
+  void generateTextEditingController(){
+
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    if(generatedId != null){
+      loadMedicationData(generatedId);
+    }
+  }
+
 
 
   @override
@@ -23,7 +58,7 @@ class AddMedicationState extends State<AddMedication> {
       appBar: new AppBar(
         backgroundColor: Colors.green,
         title: Text(
-          "Add Medication",
+          generatedId == null ? "Add Medication" : "Edit Medication",
           style: new TextStyle(
               color: Colors.white, fontSize: 25, fontFamily: 'OpenSans'),
         ),
@@ -38,6 +73,7 @@ class AddMedicationState extends State<AddMedication> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextFormField(
+                    controller: textEditingControllers["name"],
                     decoration: InputDecoration(
                       labelText: 'Medication Name',
                     ),
@@ -50,6 +86,7 @@ class AddMedicationState extends State<AddMedication> {
                         widget._newMedication.setName(input),
                   ),
                   TextFormField(
+                    controller: textEditingControllers["nickname"],
                     decoration: InputDecoration(
                       labelText: 'Medication NickName',
                     ),
@@ -62,6 +99,7 @@ class AddMedicationState extends State<AddMedication> {
                     },
                   ),
                   TextFormField(
+                    controller: textEditingControllers["dosage"],
                     decoration: InputDecoration(
                       labelText: 'Medication Dosage',
                     ),
@@ -77,6 +115,7 @@ class AddMedicationState extends State<AddMedication> {
                         widget._newMedication.setDosage(int.parse(input)),
                   ),
                   TextFormField(
+                    controller: textEditingControllers["quantity"],
                     decoration: InputDecoration(
                       labelText: 'Amount of Medication Available',
                     ),
@@ -165,7 +204,12 @@ class AddMedicationState extends State<AddMedication> {
       //   widget._newMedication.quantity,
       //   null, //special Info)
       // );
-      medicationController.addMedication(widget._newMedication);
+      if(generatedId == null){
+        medicationController.addMedication(widget._newMedication);
+      }else{
+        widget._newMedication.setId(generatedId);
+        medicationController.editMedication(widget._newMedication);
+      }
       
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationPage()));
