@@ -37,7 +37,7 @@ class FirestoreAdapter<T extends EntityBase>{
     }
   }
 
-  Future<EntityBase> updateDocument(EntityBase updateData) async {
+  Future<Map<String,dynamic>> updateDocument(EntityBase updateData) async {
 
     String generatedId = updateData.getId();
     Map<String,dynamic> extractedUpdateData = updateData.getData();
@@ -47,7 +47,7 @@ class FirestoreAdapter<T extends EntityBase>{
         .document(generatedId)
         .updateData(extractedUpdateData);
 
-    await getDocument(generatedId);
+    return (await getDocument(generatedId));
   }
 
   Future<void> deleteDocument(String generatedId) async {
@@ -78,17 +78,13 @@ class FirestoreAdapter<T extends EntityBase>{
   // }
 
   Future<Map<String,dynamic>> getDocument(String generatedId) async {
-    await firestoreInstance
+    DocumentSnapshot ds = await firestoreInstance
         .collection(collectionName)
         .document(generatedId)
-        .get()
-        .then((DocumentSnapshot ds) {
-          if (ds.documentID == generatedId && ds.data != null) {
-            return castSnapshot(ds);
-          } else {
-            return new Exception("Can't find Document: " + generatedId + " in collection: " + collectionName);
-          }
-    });
+        .get();
+
+    return FirestoreAdapter.castSnapshot(ds);
+    
   }
 
   Future<String> createDocument(EntityBase newDocument) async {

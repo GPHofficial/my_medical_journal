@@ -15,6 +15,18 @@ class MedicationController{
     firestore.createDocument(medication);
   }
 
+  Future<Medication> getMedication(String generatedId) async{
+    Map<String,dynamic> medicationMap = (await firestore.getDocument(generatedId));
+    Medication medication = Medication.castFromMap(medicationMap);
+    return medication;
+  }
+
+  Future<Medication> editMedication(Medication updateMedication) async{
+    Map<String,dynamic> medicationMap = (await firestore.updateDocument(updateMedication));
+    Medication medication = Medication.castFromMap(medicationMap);
+    return medication;
+  }
+
   Future<List<Medication>> listMedication() async{
     return castMedicationList(await firestore.listDocument());
   }
