@@ -9,6 +9,8 @@ class MedicationController{
 
   MedicationController(){
      firestore = new FirestoreAdapter<Medication>(Medication.collectionName);
+     observers = new List<Function>();
+     listenObservers();
   }
 
   void addMedication(Medication medication){
@@ -33,6 +35,12 @@ class MedicationController{
 
   void addMedicationObserver(Function func){
     observers.add(func);
+  }
+
+  void listenObservers(){
+    firestore.listenCollection((QuerySnapshot qs){
+      MedicationController.callMedicationObserver(qs);
+    });
   }
 
   static List<Medication> castMedicationList(List<Map<String,dynamic>> medicationMap){

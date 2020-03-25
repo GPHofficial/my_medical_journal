@@ -17,7 +17,11 @@ class MedicationPageState extends State<MedicationPage> {
   final TextEditingController eCtrl = new TextEditingController();
   MedicationController medicationController = new MedicationController();
   
-
+ void addToObserver() async{
+   medicationController.addMedicationObserver((List<Medication> medicationList){
+     updateMedicationItems(medicationList);
+   });
+ } 
 
   void updateMedicationItems(List<Medication> medicationList){
     setState(() {
@@ -80,6 +84,7 @@ class MedicationPageState extends State<MedicationPage> {
   void initState(){
     super.initState();
     retrieveMedicationUpdate();
+    addToObserver();
   }
 
 
