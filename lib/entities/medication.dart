@@ -86,7 +86,6 @@ class Medication implements EntityBase{
   }
 
   Medication.castFromMap(Map<String,dynamic> map){
-    print(map);
     this._medication = map["medication"];
     this._nickname = map["nickname"];
     this._dosage = map["dosage"];
