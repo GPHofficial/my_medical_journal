@@ -1,21 +1,50 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:my_medical_journal/controller/bp_controller.dart';
+import '../entities/bloodPressure.dart';
+import '../entities/bloodPressure.dart';
+import '../entities/bloodPressure.dart';
+import '../entities/bloodPressure.dart';
+import '../entities/bloodPressure.dart';
 import 'add_blood_pressure.dart';
 
 class ViewBloodPressure extends StatefulWidget{
+  ViewBloodPressure({Key key, this.generatedId}) : super(key: key);
+  final String generatedId;
   @override
-  State createState() => new ViewBloodPressureState();
+  State createState() => new ViewBloodPressureState(generatedId);
 }
 
 
 class ViewBloodPressureState extends State<ViewBloodPressure>{
+  String generatedId;
+  ViewBloodPressureState(this.generatedId);
+  static List<String> litems = [];
+  static List<Widget> listItems = [];
+  BloodPressure bp = new BloodPressure.defaults();
+
+  void loadBpData(String generatedId)async{
+    BpController bpController = new BpController();
+    BloodPressure retrievedBp = await bpController.getBp(generatedId);
+    setState(() {
+      bp = retrievedBp;
+    });
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    loadBpData("M5c6uYdYWERCyEU6tSkk");//M5c6uYdYWERCyEU6tSkk mEHHfmDyvmklk0SPq8G1
+  }
+
+
   @override
   Widget build(BuildContext context) {
     Widget diastolics = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children:<Widget>[
-          Text("111", style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
+          Text(bp.diastolic, style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
         ],
       ),
     );
@@ -23,7 +52,7 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("88", style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
+          Text(bp.systolic, style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
         ],
       ),
     );
@@ -31,7 +60,7 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("88", style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
+          Text(bp.heartRate, style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
         ],
       ),
       );
@@ -39,8 +68,8 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Text("10/3/20", style:TextStyle(fontSize:25, fontWeight: FontWeight.bold,),),
-          Text("2.00pm", style:TextStyle(fontSize:25, fontWeight: FontWeight.bold,),),
+          Text(bp.date, style:TextStyle(fontSize:25, fontWeight: FontWeight.bold,),),
+          Text(bp.time, style:TextStyle(fontSize:25, fontWeight: FontWeight.bold,),),
         ],
       ),
       );
