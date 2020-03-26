@@ -87,7 +87,8 @@ void main() async {
   final Auth _auth = Auth();
   final bool isLogged = await _auth.isLogged();
   final MyApp myApp = MyApp(
-    initialRoute: isLogged ? '/menu' : '/login',
+    //initialRoute: isLogged ? '/menu' : '/login',
+    initialRoute: '/menu',
   );
   runApp(myApp);
 }

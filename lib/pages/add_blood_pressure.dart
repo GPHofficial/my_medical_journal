@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:my_medical_journal/controller/vitals_controller.dart';
+import 'package:my_medical_journal/controller/bp_controller.dart';
 import '../entities/bloodPressure.dart';
 import 'view_blood_pressure.dart';
 import 'package:intl/intl.dart';
 
 class AddBloodPressure extends StatefulWidget{
-  final _newBloodPressure = new BloodPressure();
-  @override
-  State createState() => AddBloodPressureState();
+  AddBloodPressure({Key key, this.generatedId}) : super(key: key);
+  final String generatedId;
+  BloodPressure _newBloodPressure = new BloodPressure();
+  State createState() => AddBloodPressureState(this.generatedId);
 }
 
 class AddBloodPressureState extends State<AddBloodPressure>{
-  final _BPValue = GlobalKey<FormState>();
+  String generatedId;
+  AddBloodPressureState(this.generatedId);
+  final _bpValue = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context){
 
@@ -30,7 +33,7 @@ class AddBloodPressureState extends State<AddBloodPressure>{
             child: Padding(
               padding: new EdgeInsets.all(8.0),
               child: Form(
-                key: _BPValue,
+                key: _bpValue,
                 child: SingleChildScrollView(
                   child: new Column(
                     mainAxisSize: MainAxisSize.min,
@@ -92,15 +95,15 @@ class AddBloodPressureState extends State<AddBloodPressure>{
   }
 
   void _submit(){
-    if(_BPValue.currentState.validate()){
-      _BPValue.currentState.save();
+    if(_bpValue.currentState.validate()){
+      _bpValue.currentState.save();
       DateTime now = DateTime.now();
-      String formattedTime = DateFormat('kk:mm:ss').format(now);
+      String formattedTime = DateFormat('kk:mm').format(now);
       String formattedDate = DateFormat('dd/MM').format(now);
       widget._newBloodPressure.setDate(formattedDate);
       widget._newBloodPressure.setTime(formattedTime);
-      //BpController addbp = new BpController();
-      //addbp.addbp(uid, widget._newBloodPressure.diastolic, widget._newBloodPressure.systolic, widget._newBloodPressure.heartRate, widget._newBloodPressure.date, widget._newBloodPressure.time);
+      BpController bpController = new BpController();
+      bpController.addBp(widget._newBloodPressure);
       widget._newBloodPressure.disp();
 
       Navigator.of(context).push(new MaterialPageRoute(
