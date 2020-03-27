@@ -18,14 +18,6 @@ class BpController{
     firestore.createDocument(bp);
     }
 
-    //get all bp unique id
-    Future<List> getBpId() async{
-      QuerySnapshot result =
-          await Firestore.instance.collection('BloodPressure').getDocuments();
-      List<DocumentSnapshot> bpdoc = result.documents;
-      return bpdoc;
-    }
-
     Future<BloodPressure> getBp(String generatedId) async{
     Map<String,dynamic> bpMap = (await firestore.getDocument(generatedId));
     BloodPressure bp = BloodPressure.castFromMap(bpMap);
