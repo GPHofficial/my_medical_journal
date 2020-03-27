@@ -2,10 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:my_medical_journal/controller/bp_controller.dart';
 import '../entities/bloodPressure.dart';
-import '../entities/bloodPressure.dart';
-import '../entities/bloodPressure.dart';
-import '../entities/bloodPressure.dart';
-import '../entities/bloodPressure.dart';
 import 'add_blood_pressure.dart';
 
 class ViewBloodPressure extends StatefulWidget{
@@ -18,10 +14,10 @@ class ViewBloodPressure extends StatefulWidget{
 
 class ViewBloodPressureState extends State<ViewBloodPressure>{
   String generatedId;
-  ViewBloodPressureState(this.generatedId);
-  static List<String> litems = [];
   static List<Widget> listItems = [];
+  ViewBloodPressureState(this.generatedId);
   BloodPressure bp = new BloodPressure.defaults();
+  BpController bpController = new BpController();
 
   void loadBpData(String generatedId)async{
     BpController bpController = new BpController();
@@ -30,19 +26,33 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
       bp = retrievedBp;
     });
   }
+  void addToBpObserver() async{
+   bpController.addBpObserver((List<BloodPressure> bpList){
+     updateBpItems(bpList);
+   });
+ } 
 
-  @override
-  void initState(){
-    super.initState();
-    loadBpData("M5c6uYdYWERCyEU6tSkk");//M5c6uYdYWERCyEU6tSkk mEHHfmDyvmklk0SPq8G1
+  void updateBpItems(List<BloodPressure> bpList){
+    setState(() {
+        listItems = [];
+      });
+    for(var bp in bpList){
+      setState(() {
+        listItems.add(createBpCard(bp,context));
+      });
+    }
   }
 
+  void retrieveBpUpdate() async{
+    List<BloodPressure> bpList = await bpController.listBp();
+    updateBpItems(bpList);
+  }
 
-  @override
-  Widget build(BuildContext context) {
-    Widget diastolics = Expanded(
+  Widget createBpCard(BloodPressure bp, dynamic context){
+        Widget diastolics = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children:<Widget>[
           Text(bp.diastolic, style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
         ],
@@ -51,6 +61,7 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
     Widget systolic = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(bp.systolic, style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
         ],
@@ -59,6 +70,7 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
     Widget heartrate = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(bp.heartRate, style:TextStyle(fontSize:30, fontWeight: FontWeight.bold,),),
         ],
@@ -67,12 +79,51 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
     Widget date = Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
           Text(bp.date, style:TextStyle(fontSize:25, fontWeight: FontWeight.bold,),),
           Text(bp.time, style:TextStyle(fontSize:25, fontWeight: FontWeight.bold,),),
         ],
       ),
       );
+    return new Center(
+      child: new Container(
+        color: Colors.white,
+        height: 85.0,
+        child: new Card(
+        color: Colors.blue,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: InkWell(
+          splashColor: Colors.blue.withAlpha(100),
+          onTap:(){
+            Navigator.of(context).push(new MaterialPageRoute(
+              builder: (BuildContext context) => new ViewBloodPressure(generatedId: bp.getId())
+              )
+            );  
+          },
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              date,
+              diastolics,
+              systolic,
+              heartrate,
+            ],)
+        ),
+        ),
+        ),
+      ),
+    );
+  }
+  @override
+  void initState(){
+    super.initState();
+    retrieveBpUpdate();
+    addToBpObserver();
+  }
+  @override
+  Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
         title: Text('Blood Pressure'),
@@ -115,21 +166,10 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
               ),
             ),
             new Expanded(
-              child: new ListView.builder(itemBuilder: (context,index){
-                return Card(
-                  color: Colors.blue,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      children:<Widget>[
-                        date,
-                        diastolics,
-                        systolic,
-                        heartrate,
-                      ]
-                    ),
-                    ),
-                    );
+              child: new ListView.builder(
+                itemCount: listItems.length, // list.length to display all data
+                itemBuilder: (context,index){
+                  return listItems[index];
               }), 
               ),
           ],

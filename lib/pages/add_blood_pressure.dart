@@ -97,7 +97,7 @@ class AddBloodPressureState extends State<AddBloodPressure>{
   void _submit(){
     if(_bpValue.currentState.validate()){
       _bpValue.currentState.save();
-      DateTime now = DateTime.now();
+      DateTime now = DateTime.now().toLocal();
       String formattedTime = DateFormat('kk:mm').format(now);
       String formattedDate = DateFormat('dd/MM').format(now);
       widget._newBloodPressure.setDate(formattedDate);
