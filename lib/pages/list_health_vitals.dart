@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:my_medical_journal/pages/view_blood_glucose.dart';
 import 'view_blood_pressure.dart';
 
 class HealthVitalsPage extends StatefulWidget{
@@ -8,7 +8,7 @@ class HealthVitalsPage extends StatefulWidget{
 }
 
 class HealthVitalsPageState extends State<HealthVitalsPage>{
-  @override
+
   Widget build(BuildContext context){
     return Scaffold(
       appBar: AppBar(
@@ -25,7 +25,7 @@ class HealthVitalsPageState extends State<HealthVitalsPage>{
               ),
             RaisedButton(
               child: const Text('Blood Glucose'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ViewBloodPressure())),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ViewBloodGlucose())),
               ),
           ]
           ),
