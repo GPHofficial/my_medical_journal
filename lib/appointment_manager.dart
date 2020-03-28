@@ -11,7 +11,7 @@ class AppointmentManager{
 
   Appointment addappointment(String _Date, String _Time, int _c_name, int _a_name, int _documents)
   {
-    //appointment newappointment = new appointment.withInfo(_appointment, _nickname, _reminders, _dosage, _frequency, _quantity, _specialInfo);
+    //appointment newappointment = new appointment.withInfo(_Date, String _Time, int _c_name, int _a_name, int _documents, _specialInfo);
 
     Map<String,dynamic> write = new Map();
     write['Date'] = _Date;
