@@ -3,6 +3,10 @@ import 'package:my_medical_journal/controller/appointment_controller.dart';
 import '../entities/appointment.dart';
 import 'list_appointment.dart';
 import '../appointment_manager.dart';
+//Email
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server/mailgun.dart';
+import 'package:mailer/smtp_server.dart';
 
 class AddAppointment extends StatefulWidget {
   AddAppointment({Key key, this.generatedId}) : super(key: key);
@@ -15,8 +19,8 @@ class AddAppointmentState extends State<AddAppointment> {
   AddAppointmentState(this.generatedId);
   String generatedId;
   final _formKey = GlobalKey<FormState>();
-  String dropdownValue = 'One';
-  var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
+  String dropdownValue = 'Tay Family Clinic';
+  //var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
   var textEditingControllers = {
     "Date": new TextEditingController(),
     "Time": new TextEditingController(),
@@ -103,9 +107,9 @@ class AddAppointmentState extends State<AddAppointment> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text("Enter Clinic Name):  ", style:TextStyle(color:Colors.black54,fontSize: 16)),
+                      Text("Enter Clinic Name:  ", style:TextStyle(color:Colors.black54,fontSize: 16)),
                       DropdownButton<String>(
-                        value: dropdownValue,
+                        value:  dropdownValue,
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
@@ -141,7 +145,7 @@ class AddAppointmentState extends State<AddAppointment> {
                       return null;
                     },
                     onSaved: (input){
-                      widget._newAppointment.setClinicName(input);
+                      widget._newAppointment.setAppointName(input);
                     },
                   ),
                   TextFormField(
@@ -194,11 +198,11 @@ class AddAppointmentState extends State<AddAppointment> {
 
       // Appointment Appointment = new Appointment.set(
       //   widget._newAppointment.Appointment,
-      //   widget._newAppointment.nickname,
+      //   widget._newAppointment.Date,
       //   null, // _reminders
-      //   widget._newAppointment.dosage,
-      //   widget._newAppointment.frequency,
-      //   widget._newAppointment.quantity,
+      //   widget._newAppointment.Time,
+      //   widget._newAppointment.clinicname,
+      //   widget._newAppointment.documents,
       //   null, //special Info)
       // );
       if(generatedId == null){
@@ -208,6 +212,26 @@ class AddAppointmentState extends State<AddAppointment> {
         appointmentController.editAppointment(widget._newAppointment);
       }
 
+
+      String username = "postmaster@sandbox112b85c566be4b2e90859ffbb28a656b.mailgun.org";
+      String password = "7e22935c79f897d6b04cc67738dd93e7-ed4dc7c4-5c5d55cb";
+      final smtpServer = mailgun(username, password);
+      final message = new Message()
+        ..from = new Address(username, 'Kee Kong')
+        ..recipients.add('taykeekong@gmail.com')
+        ..subject = 'Booking of Medical Appointment'
+        ..text = 'Date: ' + widget._newAppointment.date + '\nTime: ' + widget._newAppointment.time + '\nClinic Name: ' + widget._newAppointment.clinicName + '\nAppointment Name: ' + widget._newAppointment.appointName;
+      // Finally, send it!
+      try {
+      final sendReport = send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+      }
+     on MailerException catch (e) {
+     print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+     }
+    }
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new appointmentPage()));
     }

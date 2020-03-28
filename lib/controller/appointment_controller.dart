@@ -13,8 +13,8 @@ class AppointmentController{
     listenObservers();
   }
 
-  void addAppointment(Appointment Appointment){
-    firestore.createDocument(Appointment);
+  void addAppointment(Appointment appointment){
+    firestore.createDocument(appointment);
   }
 
   Future<Appointment> getAppointment(String generatedId) async{

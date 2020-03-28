@@ -19,10 +19,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  url_launcher: ^5.0.3
   flutter_localizations:
     sdk: flutter
-
+  mailer: any
   # Add the dependency for the Firebase Core Flutter SDK
   firebase_core: ^0.4.0+9
 
@@ -33,7 +33,6 @@ dependencies:
   google_sign_in: 4.2.0
   firebase_auth: ^0.14.0+5
   flutter_auth_buttons:
-  
   google_maps_flutter: ^0.5.11
   font_awesome_flutter: ^8.2.0
   reflectable: any

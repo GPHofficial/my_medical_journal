@@ -111,7 +111,7 @@ class appointmentPageState extends State<appointmentPage> {
         title: new Row(
           children: <Widget>[
             new Text(
-              "appointment Tracker",
+              "Appointment Tracker",
               style: new TextStyle(
                   color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),
             ),
