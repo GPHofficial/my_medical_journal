@@ -12,9 +12,9 @@ class MedicationPage extends StatefulWidget {
 class MedicationPageState extends State<MedicationPage> {
 
   
-  static List<String> litems = [];
+  //static List<String> litems = [];
   static List<Widget> listItems = [];
-  final TextEditingController eCtrl = new TextEditingController();
+  //final TextEditingController eCtrl = new TextEditingController();
   MedicationController medicationController = new MedicationController();
   
  void addToObserver() async{
@@ -28,6 +28,7 @@ class MedicationPageState extends State<MedicationPage> {
         listItems = [];
       });
     for(var medication in medicationList){
+      print(medication);
       setState(() {
         listItems.add(createMedicationCard(medication,context));
       });
@@ -43,6 +44,7 @@ class MedicationPageState extends State<MedicationPage> {
 
   Widget createMedicationCard(Medication medication,dynamic context){
 
+   medication.disp();
                     return new Center(
                       child: new Container(
                         width: 400,
@@ -56,8 +58,6 @@ class MedicationPageState extends State<MedicationPage> {
                             splashColor: Colors.blue.withAlpha(30),
                             onTap: () {
                               print('Card tapped.' + medication.getId());
-
-
                               Navigator.of(context).push(new MaterialPageRoute(
                                   builder: (BuildContext context) => new ViewMedication(generatedId: medication.getId())
                                 )
@@ -118,14 +118,7 @@ class MedicationPageState extends State<MedicationPage> {
         color: Colors.white70,
         child: new Column(
           children: <Widget>[
-            new TextField(
-              controller: eCtrl,
-              onSubmitted: (text) {
-                litems.add(text);
-                eCtrl.clear();
-                setState(() {});
-              },
-            ),
+
             new Expanded(
               child: new GridView.builder(
                   itemCount: listItems.length,
