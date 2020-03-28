@@ -1,17 +1,57 @@
 import 'package:flutter/material.dart';
+import 'package:my_medical_journal/controller/appointment_controller.dart';
 import '../entities/appointment.dart';
 import 'list_appointment.dart';
+import '../appointment_manager.dart';
 
 class AddAppointment extends StatefulWidget {
-  final _newAppointment = new Appointment();
-  @override
-  State createState() => AddAppointmentState();
+  AddAppointment({Key key, this.generatedId}) : super(key: key);
+  final String generatedId;
+  Appointment _newAppointment = new Appointment();
+  State createState() => AddAppointmentState(this.generatedId);
 }
 
 class AddAppointmentState extends State<AddAppointment> {
+  AddAppointmentState(this.generatedId);
+  String generatedId;
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'One';
-  var strings = {'One':1,'Two':2,'Three':3,'Four':4};
+  var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
+  var textEditingControllers = {
+    "Date": new TextEditingController(),
+    "Time": new TextEditingController(),
+    "ClinicName": new TextEditingController(),
+    "AppointmentName": new TextEditingController(),
+    "Documents": new TextEditingController(),
+  };
+
+  void loadAppointmentData(String generatedId) async {
+    print(generatedId);
+    AppointmentController appointmentController = new AppointmentController();
+    Appointment retrievedAppointment = await appointmentController.getAppointment(generatedId);
+    setState(() {
+      widget._newAppointment = retrievedAppointment;
+      textEditingControllers["Date"].text = retrievedAppointment.date;
+      textEditingControllers["Time"].text = retrievedAppointment.time;
+      textEditingControllers["ClinicName"].text = retrievedAppointment.clinicName ;
+      textEditingControllers["AppointmentName"].text = retrievedAppointment.appointName ;
+      textEditingControllers["Documents"].text = retrievedAppointment.documents ;
+    });
+  }
+
+  void generateTextEditingController(){
+
+  }
+
+  @override
+  void initState(){
+    super.initState();
+    if(generatedId != null){
+      loadAppointmentData(generatedId);
+    }
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +60,7 @@ class AddAppointmentState extends State<AddAppointment> {
       appBar: new AppBar(
         backgroundColor: Colors.green,
         title: Text(
-          "Add Appointment",
+          generatedId == null ? "Add Appointment" : "Edit Appointment",
           style: new TextStyle(
               color: Colors.white, fontSize: 25, fontFamily: 'OpenSans'),
         ),
@@ -35,6 +75,7 @@ class AddAppointmentState extends State<AddAppointment> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   TextFormField(
+                    controller: textEditingControllers["Date"],
                     decoration: InputDecoration(
                       labelText: 'Appointment Date',
                     ),
@@ -47,6 +88,7 @@ class AddAppointmentState extends State<AddAppointment> {
                         widget._newAppointment.setDate(input),
                   ),
                   TextFormField(
+                    controller: textEditingControllers["Time"],
                     decoration: InputDecoration(
                       labelText: 'Appointment Time',
                     ),
@@ -55,41 +97,65 @@ class AddAppointmentState extends State<AddAppointment> {
                       return null;
                     },
                     onSaved: (input){
-                        widget._newAppointment.setTime(input);
+                      widget._newAppointment.setTime(input);
                     },
                   ),
-                  TextFormField(
-                    decoration: InputDecoration(
-                      labelText: 'Clinic Name',
-                    ),
-                    validator: (input) {
-                    if (input.isEmpty) return "Enter Clinic Name";
-                    return null;
-                    },
-                    onSaved: (input) =>
-                        widget._newAppointment.setclinicName(input),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      Text("Enter Clinic Name):  ", style:TextStyle(color:Colors.black54,fontSize: 16)),
+                      DropdownButton<String>(
+                        value: dropdownValue,
+                        icon: Icon(Icons.arrow_downward),
+                        iconSize: 24,
+                        elevation: 16,
+                        style: TextStyle(color: Colors.black54),
+                        underline: Container(
+                          height: 2,
+                          color: Colors.green,
+                        ),
+                        onChanged: (String newValue) {
+                          setState(() {
+                            dropdownValue = newValue;
+                            widget._newAppointment.setClinicName(dropdownValue);
+
+                          });
+                        },
+                        items: <String>['Tan Family Clinic', 'Fullerton Health', 'Sim Family Clinic', 'Tay Family Clinic']
+                            .map<DropdownMenuItem<String>>((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                      ),
+                    ],
                   ),
                   TextFormField(
+                    controller: textEditingControllers["AppointmentName"],
                     decoration: InputDecoration(
                       labelText: 'Appointment Name',
                     ),
                     validator: (input) {
-                    if (input.isEmpty) return "Enter Appointment Name";
-                    return null;
+                      if (input.isEmpty) return "Enter Appointment Name";
+                      return null;
                     },
-                    onSaved: (input) =>
-                        widget._newAppointment.setAppointmentName(input),
+                    onSaved: (input){
+                      widget._newAppointment.setClinicName(input);
+                    },
                   ),
                   TextFormField(
+                    controller: textEditingControllers["Documents"],
                     decoration: InputDecoration(
-                      labelText: 'Documents',
+                      labelText: 'Documents to bring',
                     ),
                     validator: (input) {
-                    if (input.isEmpty) return "Enter Documents";
-                    return null;
+                      if (input.isEmpty) return "Enter Documents Name";
+                      return null;
                     },
-                    onSaved: (input) =>
-                        widget._newAppointment.setDocuments(input),
+                    onSaved: (input){
+                      widget._newAppointment.setDocuments(input);
+                    },
                   ),
 
                   Row(
@@ -122,8 +188,28 @@ class AddAppointmentState extends State<AddAppointment> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       widget._newAppointment.disp();
+      AppointmentManager manager = new AppointmentManager();
+
+      AppointmentController appointmentController = new AppointmentController();
+
+      // Appointment Appointment = new Appointment.set(
+      //   widget._newAppointment.Appointment,
+      //   widget._newAppointment.nickname,
+      //   null, // _reminders
+      //   widget._newAppointment.dosage,
+      //   widget._newAppointment.frequency,
+      //   widget._newAppointment.quantity,
+      //   null, //special Info)
+      // );
+      if(generatedId == null){
+        appointmentController.addAppointment(widget._newAppointment);
+      }else{
+        widget._newAppointment.setId(generatedId);
+        appointmentController.editAppointment(widget._newAppointment);
+      }
+
       Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => new AppointmentPage()));
+          builder: (BuildContext context) => new appointmentPage()));
     }
   }
 
