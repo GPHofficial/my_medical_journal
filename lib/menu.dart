@@ -117,7 +117,7 @@ class _MenuPageState extends State<MenuPage> {
             ),
             RaisedButton(
               child: const Text('Appointment'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new AppointmentPage())),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new appointmentPage())),
             ),
             RaisedButton(
               child: const Text('Clinics'),
