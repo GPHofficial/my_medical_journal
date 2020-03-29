@@ -163,7 +163,7 @@ class _MenuPageState extends State<MenuPage> {
     Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationPage()));
     }
     if(_selectedOption==1){
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new AppointmentPage()));
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new appointmentPage()));
     }
     if(_selectedOption==2){
     Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ClinicPage()));
