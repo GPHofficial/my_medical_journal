@@ -92,39 +92,41 @@ class MedicationPageState extends State<MedicationPage> {
 
   Widget createMedicationCard(Medication medication,dynamic context){
 
+  return new Center(
+    child: new Container(
+      width: 400,
+      height: 150,
+      child: new Card(
+        elevation: 10,
+        shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10)),
+        color: Colors.white,
+        child: InkWell(
+          splashColor: Colors.blue.withAlpha(30),
+          onTap: () {
+            print('Card tapped.' + medication.getId());
 
-                    return new Center(
-                      child: new Container(
-                        width: 400,
-                        height: 150,
-                        child: new Card(
-                          elevation: 10,
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          color: Colors.white,
-                          child: InkWell(
-                            splashColor: Colors.blue.withAlpha(30),
-                            onTap: () {
-                              print('Card tapped.' + medication.getId());
-                              Navigator.of(context).push(new MaterialPageRoute(
-                                  builder: (BuildContext context) => new ViewMedication(generatedId: medication.getId())
-                                )
-                              ); 
 
-                            },
-                            child: Column(
-                              children:<Widget>[
-                                Text(medication.medication,style: TextStyle(color:Colors.black54,fontSize:20,fontWeight: FontWeight.bold,fontFamily: "OpenSans"),
-                                ),
-                            Text(medication.nickname,style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
-                            ),
+            Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => new ViewMedication(generatedId: medication.getId())
+              )
+            ); 
 
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-                    );
+          },
+          child: Column(
+            children:<Widget>[
+              Text(medication.medication,style: TextStyle(color:Colors.black54,fontSize:20,fontWeight: FontWeight.bold,fontFamily: "OpenSans"),
+              ),
+          Text(medication.nickname,style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
+          ),
+
+            ],
+          ),
+        ),
+      ),
+    ),
+  );
+
                   
   }
 
