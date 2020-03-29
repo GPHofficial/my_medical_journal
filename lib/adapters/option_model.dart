@@ -11,22 +11,22 @@ class Option {
 final options = [
   Option(
     icon: Icon(Icons.local_pharmacy, size: 40.0),
-    title: 'Medication',
+    title: 'Medication Tracker',
     subtitle: 'Manage your Medications',
   ),
   Option(
     icon: Icon(Icons.calendar_today, size: 40.0),
-    title: 'Appointment',
-    subtitle: 'Schedule Appointments and more',
+    title: 'Appointment Tracker',
+    subtitle: 'Schedule and Manage Appointments',
   ),
   Option(
     icon: Icon(Icons.local_hospital, size: 40.0),
-    title: 'Clinics',
-    subtitle: 'View clinics you can visit around you',
+    title: 'Clinic Locator',
+    subtitle: 'View clinics around you',
   ),
   Option(
     icon: Icon(Icons.trending_up, size: 40.0),
-    title: 'Health Vitals',
+    title: 'Health Vitals Tracker',
     subtitle: 'Log and Track your Vitals',
   )
 ];

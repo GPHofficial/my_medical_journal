@@ -3,7 +3,7 @@ import 'package:my_medical_journal/controller/appointment_controller.dart';
 import 'package:my_medical_journal/entities/appointment.dart';
 import 'package:my_medical_journal/pages/view_appointment.dart';
 import 'add_appointment.dart';
-
+import '../menu.dart';
 class appointmentPage extends StatefulWidget {
   @override
   State createState() => new appointmentPageState();
@@ -98,6 +98,7 @@ class appointmentPageState extends State<appointmentPage> {
       resizeToAvoidBottomInset: false, // set it to false
       //body: SingleChildScrollView(child: YourBody()),
       appBar: new AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
         flexibleSpace: new Container(
           alignment: Alignment.center,
@@ -110,6 +111,13 @@ class appointmentPageState extends State<appointmentPage> {
             child: new Container(), preferredSize: Size(100, 100)),
         title: new Row(
           children: <Widget>[
+            new IconButton(
+              icon: Icon(Icons.home),
+              onPressed:
+                  () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => new MenuPage())),
+
+            ),
             new Text(
               "Appointment Tracker",
               style: new TextStyle(
@@ -122,14 +130,6 @@ class appointmentPageState extends State<appointmentPage> {
         color: Colors.white70,
         child: new Column(
           children: <Widget>[
-            new TextField(
-              controller: eCtrl,
-              onSubmitted: (text) {
-                litems.add(text);
-                eCtrl.clear();
-                setState(() {});
-              },
-            ),
             new Expanded(
               child: new GridView.builder(
                   itemCount: listItems.length,

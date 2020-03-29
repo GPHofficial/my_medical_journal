@@ -94,8 +94,10 @@ class _MenuPageState extends State<MenuPage> {
     return Scaffold(
         backgroundColor: Color(0xFFFAFAFA),
         appBar: AppBar(
+          automaticallyImplyLeading: false,
             backgroundColor: Colors.green,
-            title: Text('Menu Options'),
+            title: Text('My Medical Journal',style: new TextStyle(
+                color: Colors.white, fontSize: 20, fontFamily: 'OpenSans'),),
 //        leading: FlatButton(
 //          textColor: Colors.white,
 //          child: Icon(
@@ -110,7 +112,7 @@ class _MenuPageState extends State<MenuPage> {
               'LOGOUT',
               style: TextStyle(
                 fontSize: 16.0,
-                fontWeight: FontWeight.bold,
+
               ),
             ),
             onPressed: () {FirebaseAuth.instance.signOut();
