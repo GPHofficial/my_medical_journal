@@ -21,6 +21,7 @@ import 'pages/list_clinic.dart';
 import 'pages/list_medication.dart';
 import 'pages/list_appointment.dart';
 import 'pages/list_health_vitals.dart';
+import 'adapters/option_model.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -85,63 +86,159 @@ class _MenuPageState extends State<MenuPage> {
     super.initState();
     syncUserData();
   }
-  
+
+  int _selectedOption = 0;
+
   @override
   Widget build(BuildContext context) {
-
-    
-    
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MenuPage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Builder(
-        builder: (context) => 
-          GridView.count(
-          // Create a grid with 2 columns. If you change the scrollDirection to
-          // horizontal, this produces 2 rows.
-          crossAxisCount: 2,
-          // Generate 100 widgets that display their index in the List.
-          children: <Widget>[
-            RaisedButton(
-              child: const Text('Medication'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationPage())),
+        backgroundColor: Color(0xFFFAFAFA),
+        appBar: AppBar(
+            backgroundColor: Colors.green,
+            title: Text('Menu Options'),
+//        leading: FlatButton(
+//          textColor: Colors.white,
+//          child: Icon(
+//            Icons.arrow_back,
+//          ),
+//          onPressed: () => print('Back'),
+//        ),
+            actions: <Widget>[
+        FlatButton(
+        textColor: Colors.white,
+            child: Text(
+              'LOGOUT',
+              style: TextStyle(
+                fontSize: 16.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            RaisedButton(
-              child: const Text('Appointment'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new appointmentPage())),
-            ),
-            RaisedButton(
-              child: const Text('Clinics'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ClinicPage())),
-            ),
-            RaisedButton(
-              child: const Text('Health Vitals'),
-              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HealthVitalsPage())),
-            ),
-            RaisedButton(
-              child: const Text('Logout'),
-              onPressed: () {
-                FirebaseAuth.instance.signOut();
-                Navigator.pushNamed(context,"/login",arguments:{this.analytics});
-              },
-            ),
-          ]
-        )
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: _incrementCounter,
-      //   tooltip: 'Increment',
-      //   child: Icon(Icons.add),
-      // ), // This trailing comma makes auto-formatting nicer for build methods.
-    ));
-    
+            onPressed: () {FirebaseAuth.instance.signOut();
+        Navigator.pushNamed(context,"/login",arguments:{this.analytics});},
+    )
+    ],
+    ),
+    body: ListView.builder(
+    itemCount: options.length + 2,
+    itemBuilder: (BuildContext context, int index) {
+    if (index == 0) {
+    return SizedBox(height: 15.0);
+    } else if (index == options.length + 1) {
+    return SizedBox(height: 100.0);
+    }
+    return Container(
+    alignment: Alignment.center,
+    margin: EdgeInsets.all(10.0),
+    width: double.infinity,
+    height: 80.0,
+    decoration: BoxDecoration(
+    color: Colors.white,
+    borderRadius: BorderRadius.circular(10.0),
+    border: _selectedOption == index - 1
+    ? Border.all(color: Colors.black26)
+        : null,
+    ),
+    child: ListTile(
+    leading: options[index - 1].icon,
+    title: Text(
+    options[index - 1].title,
+    style: TextStyle(
+    color: _selectedOption == index - 1
+    ? Colors.black
+        : Colors.grey[600],
+    ),
+    ),
+    subtitle: Text(
+    options[index - 1].subtitle,
+    style: TextStyle(
+    color:
+    _selectedOption == index - 1 ? Colors.black : Colors.grey,
+    ),
+    ),
+    selected: _selectedOption == index - 1,
+    onTap: () {
+    setState(() {
+    _selectedOption = index - 1;
+    if(_selectedOption==0){
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationPage()));
+    }
+    if(_selectedOption==1){
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new appointmentPage()));
+    }
+    if(_selectedOption==2){
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ClinicPage()));
+    }
+    if(_selectedOption==3){
+    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HealthVitalsPage()));
+    }
+    });
+    },
+    ),
+    );
+    },
+    ),
+
+    );
+
   }
+  
+//  @override
+//  Widget build(BuildContext context) {
+//
+//
+//
+//    // This method is rerun every time setState is called, for instance as done
+//    // by the _incrementCounter method above.
+//    //
+//    // The Flutter framework has been optimized to make rerunning build methods
+//    // fast, so that you can just rebuild anything that needs updating rather
+//    // than having to individually change instances of widgets.
+//    return Scaffold(
+//      appBar: AppBar(
+//        automaticallyImplyLeading: false,
+//        // Here we take the value from the MenuPage object that was created by
+//        // the App.build method, and use it to set our appbar title.
+//        title: Text(widget.title),
+//      ),
+//      body: Builder(
+//        builder: (context) =>
+//          GridView.count(
+//          // Create a grid with 2 columns. If you change the scrollDirection to
+//          // horizontal, this produces 2 rows.
+//          crossAxisCount: 2,
+//          // Generate 100 widgets that display their index in the List.
+//          children: <Widget>[
+//            RaisedButton(
+//              child: const Text('Medication'),
+//              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationPage())),
+//            ),
+//            RaisedButton(
+//              child: const Text('Appointment'),
+//              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new AppointmentPage())),
+//            ),
+//            RaisedButton(
+//              child: const Text('Clinics'),
+//              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ClinicPage())),
+//            ),
+//            RaisedButton(
+//              child: const Text('Health Vitals'),
+//              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HealthVitalsPage())),
+//            ),
+//            RaisedButton(
+//              child: const Text('Logout'),
+//              onPressed: () {
+//                FirebaseAuth.instance.signOut();
+//                Navigator.pushNamed(context,"/login",arguments:{this.analytics});
+//              },
+//            ),
+//          ]
+//        )
+//      // floatingActionButton: FloatingActionButton(
+//      //   onPressed: _incrementCounter,
+//      //   tooltip: 'Increment',
+//      //   child: Icon(Icons.add),
+//      // ), // This trailing comma makes auto-formatting nicer for build methods.
+//    ));
+//
+//  }
 }

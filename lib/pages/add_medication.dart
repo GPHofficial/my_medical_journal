@@ -3,8 +3,10 @@ import 'package:my_medical_journal/controller/medication_controller.dart';
 import '../entities/medication.dart';
 import 'list_medication.dart';
 import '../medication_manager.dart';
-
+import '../controller/notification_controller.dart';
+import '../controller/notification_controller2.dart';
 class AddMedication extends StatefulWidget {
+
   AddMedication({Key key, this.generatedId}) : super(key: key);
   final String generatedId;
   Medication _newMedication = new Medication();
@@ -12,6 +14,10 @@ class AddMedication extends StatefulWidget {
 }
 
 class AddMedicationState extends State<AddMedication> {
+  NotificationManager2 notificationManager = NotificationManager2();
+  bool mornVal=false;
+  bool afternoonVal=false;
+  bool nightVal=false;
   AddMedicationState(this.generatedId);
   String generatedId;
   final _formKey = GlobalKey<FormState>();
@@ -22,6 +28,8 @@ class AddMedicationState extends State<AddMedication> {
     "nickname": new TextEditingController(),
     "dosage": new TextEditingController(),
     "quantity": new TextEditingController(),
+    "specialinfo": new TextEditingController(),
+
   };
 
   void loadMedicationData(String generatedId) async {
@@ -34,6 +42,7 @@ class AddMedicationState extends State<AddMedication> {
       textEditingControllers["nickname"].text = retrievedMedication.nickname;
       textEditingControllers["dosage"].text = retrievedMedication.dosage == null ? "" : retrievedMedication.dosage.toString();
       textEditingControllers["quantity"].text = retrievedMedication.quantity == null ? "" : retrievedMedication.dosage.toString();
+      textEditingControllers["specialinfo"].text = retrievedMedication.quantity == null ? "" : retrievedMedication.dosage.toString();
     });
   }
 
@@ -130,6 +139,21 @@ class AddMedicationState extends State<AddMedication> {
                     onSaved: (input) =>
                         widget._newMedication.setQuantity(int.parse(input)),
                   ),
+                  TextFormField(
+                    controller: textEditingControllers["specialinfo"],
+                    decoration: InputDecoration(
+                      labelText: 'Special Info(Optional)',
+                    ),
+                    validator: (input) {
+                      print(input);
+                      print(input.runtimeType);
+                      print(intParse(input));
+
+                      return null;
+                    },
+                    onSaved: (input) =>
+                        widget._newMedication.setSpecialInfo(input),
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -161,6 +185,40 @@ class AddMedicationState extends State<AddMedication> {
                       ),
                     ],
                   ),
+              Align(
+              alignment: FractionalOffset(0, -1),
+              child:
+                  Text("Check the time of the day you need reminder!",style: TextStyle(),),
+              ),
+                  Row(
+                  children:[Text("Morning:"),
+                  Checkbox(
+                    value: mornVal,
+                    onChanged: (bool value) {
+                      setState(() {
+                        mornVal = value;
+                      });
+                    },
+                  ),
+                  Text("Afternoon:"),
+                  Checkbox(
+                    value: afternoonVal,
+                    onChanged: (bool value) {
+                      setState(() {
+                        afternoonVal = value;
+                      });
+                    },
+                  ),Text("Night:"),
+                  Checkbox(
+                    value: nightVal,
+                    onChanged: (bool value) {
+                      setState(() {
+                        nightVal = value;
+                      });
+                    },
+                  ),
+          ],
+            ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -173,9 +231,11 @@ class AddMedicationState extends State<AddMedication> {
                           child: Text("Save",
                               style: TextStyle(
                                 color: Colors.white,
-                              )),
+                              )
+                          ),
                         ),
                       ),
+
                     ],
                   ),
                 ],
@@ -189,28 +249,21 @@ class AddMedicationState extends State<AddMedication> {
 
   void _submit() {
     if (_formKey.currentState.validate()) {
+      widget._newMedication.setReminders([mornVal,afternoonVal,nightVal]);
+
+
       _formKey.currentState.save();
       widget._newMedication.disp();
       MedicationManager manager = new MedicationManager();
        
       MedicationController medicationController = new MedicationController();
-      
-      // Medication medication = new Medication.set(
-      //   widget._newMedication.medication,
-      //   widget._newMedication.nickname,
-      //   null, // _reminders
-      //   widget._newMedication.dosage,
-      //   widget._newMedication.frequency,
-      //   widget._newMedication.quantity,
-      //   null, //special Info)
-      // );
       if(generatedId == null){
         medicationController.addMedication(widget._newMedication);
       }else{
         widget._newMedication.setId(generatedId);
         medicationController.editMedication(widget._newMedication);
       }
-      
+      notificationManager.showNotification();
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationPage()));
     }

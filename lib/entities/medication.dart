@@ -7,11 +7,11 @@ class Medication implements EntityBase{
   String id;
   String _medication;
   String _nickname;
-  List<String> _reminders;
+  List<bool> _reminders;
   int _dosage;
   int _frequency;
   int _quantity;
-  List<String> _specialInfo;
+  String _specialInfo;
 
   Medication();
   Medication.set(this._medication,this._nickname,this._reminders,this._dosage,this._frequency,this._quantity,this._specialInfo);
@@ -19,11 +19,11 @@ class Medication implements EntityBase{
     this.id = "";
     this._medication = "";
     this._nickname = "";
-    this._reminders = new List<String>();
+    this._reminders = new List<bool>();
     this._dosage = 0;
     this._frequency = 0;
     this._quantity = 0;
-    this._specialInfo = new List<String>();
+    this._specialInfo = "";
   }
   String get medication=> _medication;
   String get nickname=> _nickname;
@@ -31,8 +31,8 @@ class Medication implements EntityBase{
   int get frequency=> _frequency;
   int get quantity=> _quantity;
 
-  List<String> get reminders=>_reminders;
-  List<String> get specialInfo=>_specialInfo;
+  List<bool> get reminders=>_reminders;
+  String get specialInfo=>_specialInfo;
 
   void setId(String id){
     this.id = id;
@@ -57,10 +57,10 @@ class Medication implements EntityBase{
   void setQuantity(int medication){
     this._quantity= medication;
   }
-  void setReminders(List<String> medication){
+  void setReminders(List<bool> medication){
     this._reminders = medication;
   }
-  void setSpecialInfo(List<String> medication){
+  void setSpecialInfo(String medication){
     this._specialInfo = medication;
   }
 
@@ -70,6 +70,8 @@ class Medication implements EntityBase{
     print("Medication Dosage: "+ _dosage.toString());
     print("Medication Frequency: "+_frequency.toString());
     print("Medication Quantity: "+_quantity.toString());
+    print("Medication Reminders: ");
+    print(reminders);
   }
 
   Map<String,dynamic> getData(){
@@ -91,7 +93,8 @@ class Medication implements EntityBase{
     this._dosage = map["dosage"];
     this._frequency = map["frequency"];
     this._quantity = map["quantity"];
-    this._reminders = map["reminders"];
+    if(map["reminders"] != null){
+    this._reminders = map["reminders"].cast<bool>();}
     this._specialInfo = map["specialInfo"];
     this.id = map["id"];
   }
