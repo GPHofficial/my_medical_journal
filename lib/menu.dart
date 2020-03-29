@@ -26,8 +26,6 @@ import 'adapters/option_model.dart';
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
 
-  
-
   final String title = "My Medical Journal";
   final FirebaseAnalytics analytics;
 
@@ -46,39 +44,40 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
   _MenuPageState(this.analytics);
-  
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   final FirebaseAnalytics analytics;
-  
 
   int _firebaseCheckStatus = 0;
 
   Future<bool> _onWillPop() async {
     return (await showDialog(
-      context: context,
-      builder: (context) => new AlertDialog(
-        title: new Text('Are you sure?'),
-        content: new Text('Do you want to exit an App'),
-        actions: <Widget>[
-          new FlatButton(
-            onPressed: () => Navigator.of(context).pop(false),
-            child: new Text('No'),
+          context: context,
+          builder: (context) => new AlertDialog(
+            title: new Text('Are you sure?'),
+            content: new Text('Do you want to exit an App'),
+            actions: <Widget>[
+              new FlatButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: new Text('No'),
+              ),
+              new FlatButton(
+                onPressed: () => SystemChannels.platform
+                    .invokeMethod<void>('SystemNavigator.pop'),
+                child: new Text('Yes'),
+              ),
+            ],
           ),
-          new FlatButton(
-            onPressed: () => SystemChannels.platform.invokeMethod<void>('SystemNavigator.pop'),
-            child: new Text('Yes'),
-          ),
-        ],
-      ),
-    )) ?? false;
+        )) ??
+        false;
   }
-  
- 
-  Future<void> syncUserData() async{
+
+  Future<void> syncUserData() async {
     final FirebaseUser currentUser = await _auth.currentUser();
     UserController uc = new UserController();
-    uc.addOrUpdateUser(currentUser.uid, currentUser.displayName, currentUser.email, currentUser.photoUrl);
+    uc.addOrUpdateUser(currentUser.uid, currentUser.displayName,
+        currentUser.email, currentUser.photoUrl);
   }
 
   @override
@@ -92,12 +91,15 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Color(0xFFFAFAFA),
-        appBar: AppBar(
-          automaticallyImplyLeading: false,
-            backgroundColor: Colors.green,
-            title: Text('My Medical Journal',style: new TextStyle(
-                color: Colors.white, fontSize: 20, fontFamily: 'OpenSans'),),
+      backgroundColor: Color(0xFFFAFAFA),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.green,
+        title: Text(
+          'My Medical Journal',
+          style: new TextStyle(
+              color: Colors.white, fontSize: 20, fontFamily: 'OpenSans'),
+        ),
 //        leading: FlatButton(
 //          textColor: Colors.white,
 //          child: Icon(
@@ -105,85 +107,95 @@ class _MenuPageState extends State<MenuPage> {
 //          ),
 //          onPressed: () => print('Back'),
 //        ),
-            actions: <Widget>[
-        FlatButton(
-        textColor: Colors.white,
+        actions: <Widget>[
+          FlatButton(
+            textColor: Colors.white,
             child: Text(
               'LOGOUT',
               style: TextStyle(
                 fontSize: 16.0,
-
               ),
             ),
-            onPressed: () {FirebaseAuth.instance.signOut();
-        Navigator.pushNamed(context,"/login",arguments:{this.analytics});},
-    )
-    ],
-    ),
-    body: ListView.builder(
-    itemCount: options.length + 2,
-    itemBuilder: (BuildContext context, int index) {
-    if (index == 0) {
-    return SizedBox(height: 15.0);
-    } else if (index == options.length + 1) {
-    return SizedBox(height: 100.0);
-    }
-    return Container(
-    alignment: Alignment.center,
-    margin: EdgeInsets.all(10.0),
-    width: double.infinity,
-    height: 80.0,
-    decoration: BoxDecoration(
-    color: Colors.white,
-    borderRadius: BorderRadius.circular(10.0),
-    border: _selectedOption == index - 1
-    ? Border.all(color: Colors.black26)
-        : null,
-    ),
-    child: ListTile(
-    leading: options[index - 1].icon,
-    title: Text(
-    options[index - 1].title,
-    style: TextStyle(
-    color: _selectedOption == index - 1
-    ? Colors.black
-        : Colors.grey[600],
-    ),
-    ),
-    subtitle: Text(
-    options[index - 1].subtitle,
-    style: TextStyle(
-    color:
-    _selectedOption == index - 1 ? Colors.black : Colors.grey,
-    ),
-    ),
-    selected: _selectedOption == index - 1,
-    onTap: () {
-    setState(() {
-    _selectedOption = index - 1;
-    if(_selectedOption==0){
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new MedicationPage()));
-    }
-    if(_selectedOption==1){
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new appointmentPage()));
-    }
-    if(_selectedOption==2){
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new ClinicPage()));
-    }
-    if(_selectedOption==3){
-    Navigator.of(context).push(new MaterialPageRoute(builder: (BuildContext context) => new HealthVitalsPage()));
-    }
-    });
-    },
-    ),
+            onPressed: () {
+              FirebaseAuth.instance.signOut();
+              Navigator.pushNamed(context, "/login",
+                  arguments: {this.analytics});
+            },
+          )
+        ],
+      ),
+      body:
+          ListView.builder(
+            itemCount: options.length + 2,
+            itemBuilder: (BuildContext context, int index) {
+              if (index == 0) {
+                return SizedBox(height: 15.0);
+              } else if (index == options.length + 1) {
+                return SizedBox(height: 100.0);
+              }
+              return Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.all(10.0),
+                width: double.infinity,
+                height: 80.0,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10.0),
+                  border: _selectedOption == index - 1
+                      ? Border.all(color: Colors.black26)
+                      : null,
+                ),
+                child: ListTile(
+                  leading: options[index - 1].icon,
+                  title: Text(
+                    options[index - 1].title,
+                    style: TextStyle(
+                      color: _selectedOption == index - 1
+                          ? Colors.black
+                          : Colors.grey[600],
+                    ),
+                  ),
+                  subtitle: Text(
+                    options[index - 1].subtitle,
+                    style: TextStyle(
+                      color: _selectedOption == index - 1
+                          ? Colors.black
+                          : Colors.grey,
+                    ),
+                  ),
+                  selected: _selectedOption == index - 1,
+                  onTap: () {
+                    setState(() {
+                      _selectedOption = index - 1;
+                      if (_selectedOption == 0) {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new MedicationPage()));
+                      }
+                      if (_selectedOption == 1) {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new appointmentPage()));
+                      }
+                      if (_selectedOption == 2) {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new ClinicPage()));
+                      }
+                      if (_selectedOption == 3) {
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) =>
+                                new HealthVitalsPage()));
+                      }
+                    });
+                  },
+                ),
+              );
+            },
+          ),
     );
-    },
-    ),
-
-    );
-
   }
-  
+
 //  @override
 //  Widget build(BuildContext context) {
 //

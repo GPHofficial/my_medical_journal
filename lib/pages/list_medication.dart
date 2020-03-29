@@ -115,10 +115,12 @@ class MedicationPageState extends State<MedicationPage> {
           },
           child: Column(
             children:<Widget>[
+
               Text(medication.medication,style: TextStyle(color:Colors.black54,fontSize:20,fontWeight: FontWeight.bold,fontFamily: "OpenSans"),
               ),
           Text(medication.nickname,style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
           ),
+
 
             ],
           ),

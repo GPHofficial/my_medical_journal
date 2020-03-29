@@ -27,6 +27,12 @@ class ViewMedicationState extends State<ViewMedication>{
     setState(() {
       medication = retrievedMedication;
     });
+
+
+  }
+//ADD CODE FOR DELETE
+  void deleteMedication(String generatedId) async{
+    print("Delete "+medication.medication);
   }
 
   @override
@@ -78,21 +84,7 @@ class ViewMedicationState extends State<ViewMedication>{
             new Row(
               children: <Widget>[
                 new Text(
-                  "Medication Name:",
-                  style: new TextStyle(
-                      color: Colors.black54, fontSize: 20, fontFamily: 'OpenSans'),
-                ),
-                new Text(
-                  medication.medication,
-                  style: new TextStyle(
-                      color: Colors.black54, fontSize: 20, fontFamily: 'OpenSans'),
-                ),
-              ],
-            ),
-            new Row(
-              children: <Widget>[
-                new Text(
-                  "Medication NickName:",
+                  "Medication Nickname:",
                   style: new TextStyle(
                       color: Colors.black54, fontSize: 20, fontFamily: 'OpenSans'),
                 ),
@@ -142,6 +134,19 @@ class ViewMedicationState extends State<ViewMedication>{
                   medication.frequency.toString(),
                   style: new TextStyle(
                       color: Colors.black54, fontSize: 20, fontFamily: 'OpenSans'),
+                ),
+              ],
+            ),
+            new Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                IconButton(
+                  iconSize: 50,
+                  icon: Icon(Icons.delete_forever),
+                  color: Colors.red,
+                  onPressed: () {
+
+                  },
                 ),
               ],
             ),
