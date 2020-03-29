@@ -4,7 +4,7 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:my_medical_journal/controller/clinic_controller.dart';
 import 'package:my_medical_journal/entities/clinic.dart';
-
+import '../menu.dart';
 class ClinicPage extends StatefulWidget {
   @override
   ClinicPageState createState() => ClinicPageState();
@@ -26,12 +26,15 @@ class ClinicPageState extends State<ClinicPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.green,
         leading: IconButton(
-            icon: Icon(FontAwesomeIcons.arrowLeft),
-            onPressed: () {
-              //
-            }),
-        title: Text("CLINIC LOCATOR"),
+        icon: Icon(Icons.home),
+    onPressed:
+    () => Navigator.of(context).push(new MaterialPageRoute(
+    builder: (BuildContext context) => new MenuPage())),
+        ),
+    title: Text("Clinic Locator",style: new TextStyle(
+        color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),),
         actions: <Widget>[
           IconButton(
               icon: Icon(FontAwesomeIcons.search),

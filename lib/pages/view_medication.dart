@@ -46,8 +46,9 @@ class ViewMedicationState extends State<ViewMedication>{
               color: Colors.white, fontSize: 20, fontFamily: 'OpenSans'),
         ),
         actions: <Widget>[
-          RaisedButton(
-                  child: const Text('Edit'),
+          FlatButton(
+                  textColor: Colors.white,
+                  child: const Text('Edit',style: TextStyle(fontSize: 16.0),),
                   onPressed: () {
                     Navigator.of(context).push(new MaterialPageRoute(
                       builder: (BuildContext context) => new AddMedication(generatedId: medication.getId())
