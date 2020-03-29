@@ -3,8 +3,10 @@ import 'package:my_medical_journal/controller/medication_controller.dart';
 import '../entities/medication.dart';
 import 'list_medication.dart';
 import '../medication_manager.dart';
-
+import '../controller/notification_controller.dart';
+import '../controller/notification_controller2.dart';
 class AddMedication extends StatefulWidget {
+
   AddMedication({Key key, this.generatedId}) : super(key: key);
   final String generatedId;
   Medication _newMedication = new Medication();
@@ -12,6 +14,7 @@ class AddMedication extends StatefulWidget {
 }
 
 class AddMedicationState extends State<AddMedication> {
+  NotificationManager2 notificationManager = NotificationManager2();
   bool mornVal=false;
   bool afternoonVal=false;
   bool nightVal=false;
@@ -246,29 +249,21 @@ class AddMedicationState extends State<AddMedication> {
 
   void _submit() {
     if (_formKey.currentState.validate()) {
-      //widget._newMedication.setReminders([mornVal,afternoonVal,nightVal]);
+      widget._newMedication.setReminders([mornVal,afternoonVal,nightVal]);
+
+
       _formKey.currentState.save();
       widget._newMedication.disp();
       MedicationManager manager = new MedicationManager();
        
       MedicationController medicationController = new MedicationController();
-      
-      // Medication medication = new Medication.set(
-      //   widget._newMedication.medication,
-      //   widget._newMedication.nickname,
-      //   null, // _reminders
-      //   widget._newMedication.dosage,
-      //   widget._newMedication.frequexncy,
-      //   widget._newMedication.quantity,
-      //   null, //special Info)
-      // );
       if(generatedId == null){
         medicationController.addMedication(widget._newMedication);
       }else{
         widget._newMedication.setId(generatedId);
         medicationController.editMedication(widget._newMedication);
       }
-      
+      notificationManager.showNotification();
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationPage()));
     }

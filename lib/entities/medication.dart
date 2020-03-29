@@ -93,7 +93,8 @@ class Medication implements EntityBase{
     this._dosage = map["dosage"];
     this._frequency = map["frequency"];
     this._quantity = map["quantity"];
-    this._reminders = map["reminders"];
+    if(map["reminders"] != null){
+    this._reminders = map["reminders"].cast<bool>();}
     this._specialInfo = map["specialInfo"];
     this.id = map["id"];
   }
