@@ -4,6 +4,7 @@ import 'package:my_medical_journal/entities/medication.dart';
 import 'package:my_medical_journal/pages/view_medication.dart';
 import 'add_medication.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import '../menu.dart';
 class MedicationPage extends StatefulWidget {
   @override
   State createState() => new MedicationPageState();
@@ -133,6 +134,7 @@ class MedicationPageState extends State<MedicationPage> {
       resizeToAvoidBottomInset: false, // set it to false
       //body: SingleChildScrollView(child: YourBody()),
       appBar: new AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.green,
         flexibleSpace: new Container(
           alignment: Alignment.center,
@@ -145,6 +147,13 @@ class MedicationPageState extends State<MedicationPage> {
             child: new Container(), preferredSize: Size(100, 100)),
         title: new Row(
           children: <Widget>[
+            new IconButton(
+              icon: Icon(Icons.home),
+              onPressed:
+                  () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => new MenuPage())),
+
+            ),
             new Text(
               "Medication Tracker",
               style: new TextStyle(
