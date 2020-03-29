@@ -85,8 +85,8 @@ class Auth {
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   final Auth _auth = Auth();
-  final bool isLogged = true;
-  // final bool isLogged = await _auth.isLogged();
+  //final bool isLogged = true;
+  final bool isLogged = await _auth.isLogged();
   final MyApp myApp = MyApp(
     initialRoute: isLogged ? '/menu' : '/login',
   );
