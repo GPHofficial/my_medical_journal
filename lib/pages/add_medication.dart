@@ -43,6 +43,9 @@ class AddMedicationState extends State<AddMedication> {
       textEditingControllers["dosage"].text = retrievedMedication.dosage == null ? "" : retrievedMedication.dosage.toString();
       textEditingControllers["quantity"].text = retrievedMedication.quantity == null ? "" : retrievedMedication.dosage.toString();
       textEditingControllers["specialinfo"].text = retrievedMedication.quantity == null ? "" : retrievedMedication.dosage.toString();
+      mornVal = retrievedMedication.reminders== null ? false : retrievedMedication.reminders[0];
+      afternoonVal = retrievedMedication.reminders== null ? false : retrievedMedication.reminders[1];
+      nightVal = retrievedMedication.reminders== null ? false : retrievedMedication.reminders[2];
     });
   }
 

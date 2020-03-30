@@ -91,6 +91,7 @@ class _MenuPageState extends State<MenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Color(0xFFFAFAFA),
       appBar: AppBar(
         automaticallyImplyLeading: false,
