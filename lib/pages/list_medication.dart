@@ -5,6 +5,7 @@ import 'package:my_medical_journal/pages/view_medication.dart';
 import 'add_medication.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../menu.dart';
+
 class MedicationPage extends StatefulWidget {
   @override
   State createState() => new MedicationPageState();
@@ -22,28 +23,26 @@ class MedicationPageState extends State<MedicationPage> {
         ));
   }
 
+  showNotification(int hour,int minute,String name,int dosage,int index) async{
+    var time = Time(hour,minute , 0);
+    var androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics =
+    IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-  showNotification(List<Medication> medicationList) async {
-    var time=Time(23,4,0);
-        var androidPlatformChannelSpecifics =
-        AndroidNotificationDetails('repeatDailyAtTime channel id',
-            'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
-        var iOSPlatformChannelSpecifics =
-        IOSNotificationDetails();
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-        await flutterLocalNotificationsPlugin.showDailyAtTime(
-            0,
-            'Take your Medication: !',
-            'Take the following Dosage: ',
-            time,
-            platformChannelSpecifics);
-    //medicationList[i].medication
-
-    }
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        index,
+        "Take Medication: "+name,
+        "Take Amount: "+dosage.toString(),
+        time,
+        platformChannelSpecifics);
+    print("DONE");
 
 
-
+  }
 
   @override
   void initState() {
@@ -56,81 +55,105 @@ class MedicationPageState extends State<MedicationPage> {
     var initSettings = InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings,
         onSelectNotification: onSelectNotification);
-    showNotification(listmeds);
   }
 
   static List<Widget> listItems = [];
-  static List<Medication> listmeds=[];
+  static List<Medication> listmeds = [];
 
   MedicationController medicationController = new MedicationController();
 
- void addToObserver() async{
-   medicationController.addMedicationObserver((List<Medication> medicationList){
-     updateMedicationItems(medicationList);
-   });
- }
+  void addToObserver() async {
+    medicationController
+        .addMedicationObserver((List<Medication> medicationList) {
+      updateMedicationItems(medicationList);
+    });
+  }
 
-  void updateMedicationItems(List<Medication> medicationList){
+  void updateMedicationItems(List<Medication> medicationList) {
+    int count=0;
     setState(() {
-        listItems = [];
-      });
-    for(var medication in medicationList){
+      listItems = [];
+    });
+    for (var medication in medicationList) {
       //print(medication);
       setState(() {
-        listmeds.add(medication);
-        listItems.add(createMedicationCard(medication,context));
+        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,count);count++;}
+        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,count);count++;}
+        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,count);count++;}
+        listItems.add(createMedicationCard(medication, context));
       });
     }
   }
 
-  void retrieveMedicationUpdate() async{
-    List<Medication> medicationList = await medicationController.listMedication();
+  void retrieveMedicationUpdate() async {
+    List<Medication> medicationList =
+        await medicationController.listMedication();
     updateMedicationItems(medicationList);
   }
 
+  Widget createMedicationCard(Medication medication, dynamic context) {
+    return new Center(
+      child: new Container(
+        width: 400,
+        height: 150,
+        child: new Card(
+          elevation: 10,
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          color: Colors.white,
+          child: InkWell(
+            splashColor: Colors.blue.withAlpha(30),
+            onTap: () {
+              print('Card tapped.' + medication.getId());
 
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) =>
+                      new ViewMedication(generatedId: medication.getId())));
+            },
+            child: Column(
+              children: <Widget>[
+                Text(
+                  medication.medication,
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: "OpenSans"),
+                ),
+                Text(
+                  medication.nickname,
+                  style: TextStyle(
+                    color: Colors.black54,
+                    fontSize: 15,
+                    fontFamily: "OpenSans",
+                    fontStyle: FontStyle.italic,
+                  ),
+                ),
 
-  Widget createMedicationCard(Medication medication,dynamic context){
-
-  return new Center(
-    child: new Container(
-      width: 400,
-      height: 150,
-      child: new Card(
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10)),
-        color: Colors.white,
-        child: InkWell(
-          splashColor: Colors.blue.withAlpha(30),
-          onTap: () {
-            print('Card tapped.' + medication.getId());
-
-
-            Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => new ViewMedication(generatedId: medication.getId())
-              )
-            ); 
-
-          },
-          child: Column(
-            children:<Widget>[
-
-              Text(medication.medication,style: TextStyle(color:Colors.black54,fontSize:20,fontWeight: FontWeight.bold,fontFamily: "OpenSans"),
-              ),
-          Text(medication.nickname,style: TextStyle(color:Colors.black54,fontSize:15,fontFamily: "OpenSans"),
-          ),
-
-
-
-            ],
+                medication.specialInfo == null
+                    ? Text(
+                        "",
+                      )
+                    : Center(
+                  heightFactor: 2,
+                  child:Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Instructions:",style:TextStyle(
+                      color: Colors.black54,)),
+                    Text(medication.specialInfo,
+                        style: TextStyle(
+                          color: Colors.black54,
+                        )),
+                  ],
+                ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
-    ),
-  );
-
-                  
+    );
   }
 
   @override
@@ -154,10 +177,8 @@ class MedicationPageState extends State<MedicationPage> {
           children: <Widget>[
             new IconButton(
               icon: Icon(Icons.home),
-              onPressed:
-                  () => Navigator.of(context).push(new MaterialPageRoute(
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
                   builder: (BuildContext context) => new MenuPage())),
-
             ),
             new Text(
               "Medication Tracker",
@@ -171,14 +192,12 @@ class MedicationPageState extends State<MedicationPage> {
         color: Colors.white70,
         child: new Column(
           children: <Widget>[
-
             new Expanded(
               child: new GridView.builder(
                   itemCount: listItems.length,
                   gridDelegate: new SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2),
                   itemBuilder: (BuildContext context, int index) {
-
                     return listItems[index];
                   }),
             ),
