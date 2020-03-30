@@ -77,9 +77,9 @@ class MedicationPageState extends State<MedicationPage> {
     for (var medication in medicationList) {
       //print(medication);
       setState(() {
-        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,count);count++;}
-        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,count);count++;}
-        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,count);count++;}
+        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,medication.dosage,count);count++;}
+        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,medication.dosage,count);count++;}
+        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,medication.dosage,count);count++;}
         listItems.add(createMedicationCard(medication, context));
       });
     }
