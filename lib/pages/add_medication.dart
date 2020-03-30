@@ -3,8 +3,7 @@ import 'package:my_medical_journal/controller/medication_controller.dart';
 import '../entities/medication.dart';
 import 'list_medication.dart';
 import '../medication_manager.dart';
-import '../controller/notification_controller.dart';
-import '../controller/notification_controller2.dart';
+
 class AddMedication extends StatefulWidget {
 
   AddMedication({Key key, this.generatedId}) : super(key: key);
@@ -14,7 +13,7 @@ class AddMedication extends StatefulWidget {
 }
 
 class AddMedicationState extends State<AddMedication> {
-  NotificationManager2 notificationManager = NotificationManager2();
+
   bool mornVal=false;
   bool afternoonVal=false;
   bool nightVal=false;
