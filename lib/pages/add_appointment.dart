@@ -17,9 +17,11 @@ class AddAppointment extends StatefulWidget {
 
 class AddAppointmentState extends State<AddAppointment> {
   AddAppointmentState(this.generatedId);
+
   String generatedId;
   final _formKey = GlobalKey<FormState>();
   String dropdownValue = 'Tay Family Clinic';
+
   //var strtoint = {'One':1,'Two':2,'Three':3,'Four':4};
   var textEditingControllers = {
     "Date": new TextEditingController(),
@@ -32,29 +34,31 @@ class AddAppointmentState extends State<AddAppointment> {
   void loadAppointmentData(String generatedId) async {
     print(generatedId);
     AppointmentController appointmentController = new AppointmentController();
-    Appointment retrievedAppointment = await appointmentController.getAppointment(generatedId);
+    Appointment retrievedAppointment = await appointmentController
+        .getAppointment(generatedId);
     setState(() {
       widget._newAppointment = retrievedAppointment;
       textEditingControllers["Date"].text = retrievedAppointment.date;
       textEditingControllers["Time"].text = retrievedAppointment.time;
-      textEditingControllers["ClinicName"].text = retrievedAppointment.clinicName ;
-      textEditingControllers["AppointmentName"].text = retrievedAppointment.appointName ;
-      textEditingControllers["Documents"].text = retrievedAppointment.documents ;
+      textEditingControllers["ClinicName"].text =
+          retrievedAppointment.clinicName;
+      textEditingControllers["AppointmentName"].text =
+          retrievedAppointment.appointName;
+      textEditingControllers["Documents"].text = retrievedAppointment.documents;
     });
   }
 
-  void generateTextEditingController(){
+  void generateTextEditingController() {
 
   }
 
   @override
-  void initState(){
+  void initState() {
     super.initState();
-    if(generatedId != null){
+    if (generatedId != null) {
       loadAppointmentData(generatedId);
     }
   }
-
 
 
   @override
@@ -100,16 +104,17 @@ class AddAppointmentState extends State<AddAppointment> {
                       if (input.isEmpty) return "Enter Time";
                       return null;
                     },
-                    onSaved: (input){
+                    onSaved: (input) {
                       widget._newAppointment.setTime(input);
                     },
                   ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
-                      Text("Enter Clinic Name:  ", style:TextStyle(color:Colors.black54,fontSize: 16)),
+                      Text("Enter Clinic Name:  ", style: TextStyle(
+                          color: Colors.black54, fontSize: 16)),
                       DropdownButton<String>(
-                        value:  dropdownValue,
+                        value: dropdownValue,
                         icon: Icon(Icons.arrow_downward),
                         iconSize: 24,
                         elevation: 16,
@@ -122,10 +127,14 @@ class AddAppointmentState extends State<AddAppointment> {
                           setState(() {
                             dropdownValue = newValue;
                             widget._newAppointment.setClinicName(dropdownValue);
-
                           });
                         },
-                        items: <String>['Tan Family Clinic', 'Fullerton Health', 'Sim Family Clinic', 'Tay Family Clinic']
+                        items: <String>[
+                          'Tan Family Clinic',
+                          'Fullerton Health',
+                          'Sim Family Clinic',
+                          'Tay Family Clinic'
+                        ]
                             .map<DropdownMenuItem<String>>((String value) {
                           return DropdownMenuItem<String>(
                             value: value,
@@ -144,7 +153,7 @@ class AddAppointmentState extends State<AddAppointment> {
                       if (input.isEmpty) return "Enter Appointment Name";
                       return null;
                     },
-                    onSaved: (input){
+                    onSaved: (input) {
                       widget._newAppointment.setAppointName(input);
                     },
                   ),
@@ -157,7 +166,7 @@ class AddAppointmentState extends State<AddAppointment> {
                       if (input.isEmpty) return "Enter Documents Name";
                       return null;
                     },
-                    onSaved: (input){
+                    onSaved: (input) {
                       widget._newAppointment.setDocuments(input);
                     },
                   ),
@@ -186,7 +195,8 @@ class AddAppointmentState extends State<AddAppointment> {
       ),
     );
   }
-  void bookingAppointment(){
+
+  void bookingAppointment() {
     String username = "***REMOVED***";
     String password = "***REMOVED***";
     final smtpServer = mailgun(username, password);
@@ -194,7 +204,10 @@ class AddAppointmentState extends State<AddAppointment> {
       ..from = new Address(username, 'Kee Kong')
       ..recipients.add('taykeekong@gmail.com')
       ..subject = 'Booking of Medical Appointment'
-      ..text = 'Date: ' + widget._newAppointment.date + '\nTime: ' + widget._newAppointment.time + '\nClinic Name: ' + widget._newAppointment.clinicName + '\nAppointment Name: ' + widget._newAppointment.appointName;
+      ..text = 'Date: ' + widget._newAppointment.date + '\nTime: ' +
+          widget._newAppointment.time + '\nClinic Name: ' +
+          widget._newAppointment.clinicName + '\nAppointment Name: ' +
+          widget._newAppointment.appointName;
     // Finally, send it!
     try {
       final sendReport = send(message, smtpServer);
@@ -225,19 +238,15 @@ class AddAppointmentState extends State<AddAppointment> {
       //   widget._newAppointment.documents,
       //   null, //special Info)
       // );
-      if(generatedId == null){
+      if (generatedId == null) {
         appointmentController.addAppointment(widget._newAppointment);
-      }else{
+      } else {
         widget._newAppointment.setId(generatedId);
         appointmentController.editAppointment(widget._newAppointment);
       }
       bookingAppointment();
       Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => new appointmentPage()));
+          builder: (BuildContext context) => new AppointmentPage()));
     }
-  }
-
-  String intParse(String s) {
-    return s.replaceAll(RegExp(r'[0-9]'), '');
   }
 }

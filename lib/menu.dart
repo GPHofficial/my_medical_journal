@@ -199,7 +199,7 @@ class _MenuPageState extends State<MenuPage> {
 
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (BuildContext context) =>
-                                new appointmentPage()));
+                                new AppointmentPage()));
                         showNotification();
                       }
                       if (_selectedOption == 2) {

@@ -4,12 +4,12 @@ import 'package:my_medical_journal/entities/appointment.dart';
 import 'package:my_medical_journal/pages/view_appointment.dart';
 import 'add_appointment.dart';
 import '../menu.dart';
-class appointmentPage extends StatefulWidget {
+class AppointmentPage extends StatefulWidget {
   @override
   State createState() => new AppointmentPageState();
 }
 
-class AppointmentPageState extends State<appointmentPage> {
+class AppointmentPageState extends State<AppointmentPage> {
 
 
   static List<String> items = [];
@@ -29,7 +29,7 @@ class AppointmentPageState extends State<appointmentPage> {
     });
     for(var appointment in appointmentList){
       setState(() {
-        listItems.add(createappointmentCard(appointment,context));
+        listItems.add(createAppointmentCard(appointment,context));
       });
     }
   }
@@ -41,7 +41,7 @@ class AppointmentPageState extends State<appointmentPage> {
 
 
 
-  Widget createappointmentCard(Appointment appointment,dynamic context){
+  Widget createAppointmentCard(Appointment appointment,dynamic context){
 
     return new Center(
       child: new Container(
@@ -234,7 +234,7 @@ class AppointmentPageState extends State<appointmentPage> {
 
 //       floatingActionButton: FloatingActionButton(
 //         onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
-//             builder: (BuildContext context) => new Addappointment())),
+//             builder: (BuildContext context) => new AddAppointment())),
 //         tooltip: 'Increment Counter',
 //         backgroundColor: Colors.green,
 //         child: const Icon(Icons.add),

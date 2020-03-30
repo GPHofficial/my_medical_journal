@@ -42,7 +42,7 @@ class AppointmentDB {
     // if (fileExists) {
     //   print("File exists");
     //   Map<String, dynamic> jsonFileContent = json.decode(jsonFile.readAsStringSync());
-    //   jsonFileContent.addAll(content);
+    //   jsonFileContent.addAll(  content);
     //   jsonFile.writeAsStringSync(jsonEncode(jsonFileContent));
     // } else {
     //   print("File does not exist!");

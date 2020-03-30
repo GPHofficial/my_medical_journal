@@ -9,7 +9,7 @@ class AppointmentManager{
   AppointmentDB appointmentDB = new AppointmentDB();
 
 
-  Appointment addappointment(String _Date, String _Time, int _c_name, int _a_name, int _documents)
+  Appointment addappointment(String _Date, String _Time, String _c_name, String _a_name, String _documents)
   {
     //appointment newappointment = new appointment.withInfo(_Date, String _Time, int _c_name, int _a_name, int _documents, _specialInfo);
 
