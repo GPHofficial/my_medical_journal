@@ -49,18 +49,18 @@ class Appointment implements EntityBase{
   void setAppointName(String appointName){
     this._a_name = appointName;
   }
-  void setTime(String Time){
-    this._Time = Time;
+  void setTime(String time){
+    this._Time = time;
   }
 
   void setDocuments(String documents){
     this._documents = documents;
   }
-  void setReminders(List<String> Appointment){
-    this._reminders = Appointment;
+  void setReminders(List<String> reminders){
+    this._reminders = reminders;
   }
-  void setSpecialInfo(List<String> Appointment){
-    this._specialInfo = Appointment;
+  void setSpecialInfo(List<String> specialInfo){
+    this._specialInfo = specialInfo;
   }
 
   void disp(){

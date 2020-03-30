@@ -161,7 +161,6 @@ class AddAppointmentState extends State<AddAppointment> {
                       widget._newAppointment.setDocuments(input);
                     },
                   ),
-
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -187,6 +186,27 @@ class AddAppointmentState extends State<AddAppointment> {
       ),
     );
   }
+  void bookingAppointment(){
+    String username = "***REMOVED***";
+    String password = "***REMOVED***";
+    final smtpServer = mailgun(username, password);
+    final message = new Message()
+      ..from = new Address(username, 'Kee Kong')
+      ..recipients.add('taykeekong@gmail.com')
+      ..subject = 'Booking of Medical Appointment'
+      ..text = 'Date: ' + widget._newAppointment.date + '\nTime: ' + widget._newAppointment.time + '\nClinic Name: ' + widget._newAppointment.clinicName + '\nAppointment Name: ' + widget._newAppointment.appointName;
+    // Finally, send it!
+    try {
+      final sendReport = send(message, smtpServer);
+      print('Message sent: ' + sendReport.toString());
+    }
+    on MailerException catch (e) {
+      print('Message not sent.');
+      for (var p in e.problems) {
+        print('Problem: ${p.code}: ${p.msg}');
+      }
+    }
+  }
 
   void _submit() {
     if (_formKey.currentState.validate()) {
@@ -211,27 +231,7 @@ class AddAppointmentState extends State<AddAppointment> {
         widget._newAppointment.setId(generatedId);
         appointmentController.editAppointment(widget._newAppointment);
       }
-
-
-      String username = "***REMOVED***";
-      String password = "***REMOVED***";
-      final smtpServer = mailgun(username, password);
-      final message = new Message()
-        ..from = new Address(username, 'Kee Kong')
-        ..recipients.add('taykeekong@gmail.com')
-        ..subject = 'Booking of Medical Appointment'
-        ..text = 'Date: ' + widget._newAppointment.date + '\nTime: ' + widget._newAppointment.time + '\nClinic Name: ' + widget._newAppointment.clinicName + '\nAppointment Name: ' + widget._newAppointment.appointName;
-      // Finally, send it!
-      try {
-      final sendReport = send(message, smtpServer);
-      print('Message sent: ' + sendReport.toString());
-      }
-     on MailerException catch (e) {
-     print('Message not sent.');
-      for (var p in e.problems) {
-        print('Problem: ${p.code}: ${p.msg}');
-     }
-    }
+      bookingAppointment();
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new appointmentPage()));
     }

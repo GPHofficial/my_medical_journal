@@ -6,24 +6,24 @@ import 'add_appointment.dart';
 import '../menu.dart';
 class appointmentPage extends StatefulWidget {
   @override
-  State createState() => new appointmentPageState();
+  State createState() => new AppointmentPageState();
 }
 
-class appointmentPageState extends State<appointmentPage> {
+class AppointmentPageState extends State<appointmentPage> {
 
 
-  static List<String> litems = [];
+  static List<String> items = [];
   static List<Widget> listItems = [];
   final TextEditingController eCtrl = new TextEditingController();
   AppointmentController appointmentController = new AppointmentController();
 
   void addToObserver() async{
     appointmentController.addAppointmentObserver((List<Appointment> appointmentList){
-      updateappointmentItems(appointmentList);
+      updateAppointmentItems(appointmentList);
     });
   }
 
-  void updateappointmentItems(List<Appointment> appointmentList){
+  void updateAppointmentItems(List<Appointment> appointmentList){
     setState(() {
       listItems = [];
     });
@@ -34,9 +34,9 @@ class appointmentPageState extends State<appointmentPage> {
     }
   }
 
-  void retrieveappointmentUpdate() async{
+  void retrieveAppointmentUpdate() async{
     List<Appointment> appointmentList = await appointmentController.listAppointment();
-    updateappointmentItems(appointmentList);
+    updateAppointmentItems(appointmentList);
   }
 
 
@@ -87,7 +87,7 @@ class appointmentPageState extends State<appointmentPage> {
   @override
   void initState(){
     super.initState();
-    retrieveappointmentUpdate();
+    retrieveAppointmentUpdate();
     addToObserver();
   }
 
