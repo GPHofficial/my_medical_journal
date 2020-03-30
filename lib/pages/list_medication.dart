@@ -23,7 +23,7 @@ class MedicationPageState extends State<MedicationPage> {
         ));
   }
 
-  showNotification(int hour,int minute,String name,int index) async{
+  showNotification(int hour,int minute,String name,int dosage,int index) async{
     var time = Time(hour,minute , 0);
     var androidPlatformChannelSpecifics =
     AndroidNotificationDetails('repeatDailyAtTime channel id',
@@ -35,9 +35,8 @@ class MedicationPageState extends State<MedicationPage> {
 
     await flutterLocalNotificationsPlugin.showDailyAtTime(
         index,
-        name,
-        'Daily notification shown at approximately ${time.hour}:${time
-            .minute}:${time.second}',
+        "Take Medication: "+name,
+        "Take Amount: "+dosage.toString(),
         time,
         platformChannelSpecifics);
     print("DONE");
