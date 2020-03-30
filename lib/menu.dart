@@ -22,6 +22,7 @@ import 'pages/list_medication.dart';
 import 'pages/list_appointment.dart';
 import 'pages/list_health_vitals.dart';
 import 'adapters/option_model.dart';
+import 'controller/notification_controller2.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -51,27 +52,6 @@ class _MenuPageState extends State<MenuPage> {
 
   int _firebaseCheckStatus = 0;
 
-  Future<bool> _onWillPop() async {
-    return (await showDialog(
-          context: context,
-          builder: (context) => new AlertDialog(
-            title: new Text('Are you sure?'),
-            content: new Text('Do you want to exit an App'),
-            actions: <Widget>[
-              new FlatButton(
-                onPressed: () => Navigator.of(context).pop(false),
-                child: new Text('No'),
-              ),
-              new FlatButton(
-                onPressed: () => SystemChannels.platform
-                    .invokeMethod<void>('SystemNavigator.pop'),
-                child: new Text('Yes'),
-              ),
-            ],
-          ),
-        )) ??
-        false;
-  }
 
   Future<void> syncUserData() async {
     final FirebaseUser currentUser = await _auth.currentUser();
@@ -169,6 +149,10 @@ class _MenuPageState extends State<MenuPage> {
                     setState(() {
                       _selectedOption = index - 1;
                       if (_selectedOption == 0) {
+                        NotificationManager2 notificationManager2 = NotificationManager2();
+                        notificationManager2.showNotification(17,10,0);
+                        notificationManager2.showNotification(00,09,1);
+
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 new MedicationPage()));

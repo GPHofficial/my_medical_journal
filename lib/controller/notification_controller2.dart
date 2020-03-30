@@ -5,12 +5,7 @@ class NotificationManager2{
 
   NotificationManager2() {
 
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOS = IOSInitializationSettings();
-    var initSettings = InitializationSettings(android, iOS);
-    flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: onSelectNotification);
+
   }
 
   Future onSelectNotification(String payload) {
@@ -25,10 +20,15 @@ class NotificationManager2{
     return Future.value(0);
   }
 
-  showNotification() async {
+  showNotification(int hour,int min, int index) async {
+    FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = IOSInitializationSettings();
+    var initSettings = InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: onSelectNotification);
 
-
-    var time = Time(12, 03, 0);
+    var time = Time(hour, min , 0);
     var androidPlatformChannelSpecifics =
     AndroidNotificationDetails('repeatDailyAtTime channel id',
         'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
@@ -38,7 +38,7 @@ class NotificationManager2{
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
     await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
+        index,
         "wassup",
         'Daily notification shown at approximately ${time.hour}:${time
             .minute}:${time.second}',
