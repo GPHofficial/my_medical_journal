@@ -266,7 +266,7 @@ class AddMedicationState extends State<AddMedication> {
         widget._newMedication.setId(generatedId);
         medicationController.editMedication(widget._newMedication);
       }
-      notificationManager.showNotification();
+      //notificationManager.showNotification();
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new MedicationPage()));
     }

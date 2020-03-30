@@ -18,27 +18,31 @@ class MedicationPageState extends State<MedicationPage> {
     showDialog(
         context: context,
         builder: (_) => AlertDialog(
-              title: Text("ALERT"),
-              content: Text("CONTENT: $payload"),
-            ));
+          title: Text("ALERT"),
+          content: Text("CONTENT: $payload"),
+        ));
   }
 
-  showNotification(List<Medication> medicationList) async {
-    var time = Time(23, 4, 0);
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        'repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name',
-        'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+  showNotification(int hour,int minute,String name,int index) async{
+    var time = Time(hour,minute , 0);
+    var androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics =
+    IOSNotificationDetails();
     var platformChannelSpecifics = NotificationDetails(
         androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
     await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
-        'Take your Medication: !',
-        'Take the following Dosage: ',
+        index,
+        name,
+        'Daily notification shown at approximately ${time.hour}:${time
+            .minute}:${time.second}',
         time,
         platformChannelSpecifics);
-    //medicationList[i].medication
+    print("DONE");
+
+
   }
 
   @override
@@ -52,7 +56,6 @@ class MedicationPageState extends State<MedicationPage> {
     var initSettings = InitializationSettings(android, iOS);
     flutterLocalNotificationsPlugin.initialize(initSettings,
         onSelectNotification: onSelectNotification);
-    showNotification(listmeds);
   }
 
   static List<Widget> listItems = [];
@@ -68,13 +71,16 @@ class MedicationPageState extends State<MedicationPage> {
   }
 
   void updateMedicationItems(List<Medication> medicationList) {
+    int count=0;
     setState(() {
       listItems = [];
     });
     for (var medication in medicationList) {
       //print(medication);
       setState(() {
-        listmeds.add(medication);
+        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,count);count++;}
+        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,count);count++;}
+        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,count);count++;}
         listItems.add(createMedicationCard(medication, context));
       });
     }

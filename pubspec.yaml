@@ -49,6 +49,13 @@ dependency_overrides:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.7.0
+
+flutter_icons:
+  image_path: "assets/images/logo_new.png"
+  ios: true
+  android: true
+
   # path_provider: "^0.4.0"
 
 

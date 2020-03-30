@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:my_medical_journal/controller/medication_controller.dart';
 import 'package:my_medical_journal/entities/medication.dart';
 import 'package:my_medical_journal/pages/add_medication.dart';
+import 'list_medication.dart';
 
 class ViewMedication extends StatefulWidget{
 
@@ -16,13 +17,14 @@ class ViewMedication extends StatefulWidget{
 class ViewMedicationState extends State<ViewMedication>{
 
   ViewMedicationState(this.generatedId);
+  MedicationController medicationController;
 
   Medication medication = new Medication.defaults();
   String generatedId;
 
   void loadMedicationData(String generatedId) async {
     print(generatedId);
-    MedicationController medicationController = new MedicationController();
+    medicationController = new MedicationController();
     Medication retrievedMedication = await medicationController.getMedication(generatedId);
     setState(() {
       medication = retrievedMedication;
@@ -32,7 +34,9 @@ class ViewMedicationState extends State<ViewMedication>{
   }
 //ADD CODE FOR DELETE
   void deleteMedication(String generatedId) async{
-    print("Delete "+medication.medication);
+    Navigator.of(context).push(new MaterialPageRoute(
+        builder: (BuildContext context) => new MedicationPage()));
+    medicationController.deleteMedication(generatedId);
   }
 
   @override
@@ -145,7 +149,7 @@ class ViewMedicationState extends State<ViewMedication>{
                   icon: Icon(Icons.delete_forever),
                   color: Colors.red,
                   onPressed: () {
-
+                      deleteMedication(generatedId);
                   },
                 ),
               ],

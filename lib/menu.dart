@@ -22,7 +22,8 @@ import 'pages/list_medication.dart';
 import 'pages/list_appointment.dart';
 import 'pages/list_health_vitals.dart';
 import 'adapters/option_model.dart';
-import 'controller/notification_controller2.dart';
+
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -44,6 +45,42 @@ class MenuPage extends StatefulWidget {
 }
 
 class _MenuPageState extends State<MenuPage> {
+
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  Future onSelectNotification(String payload) {
+    showDialog(
+        context: context,
+        builder: (_) => AlertDialog(
+          title: Text("ALERT"),
+          content: Text("CONTENT: $payload"),
+        ));
+  }
+
+  showNotification() async {
+    var time = Time(17, 59 , 0);
+    var androidPlatformChannelSpecifics =
+    AndroidNotificationDetails('repeatDailyAtTime channel id',
+        'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
+    var iOSPlatformChannelSpecifics =
+    IOSNotificationDetails();
+    var platformChannelSpecifics = NotificationDetails(
+        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+
+    await flutterLocalNotificationsPlugin.showDailyAtTime(
+        0,
+        "wassup",
+        'Daily notification shown at approximately ${time.hour}:${time
+            .minute}:${time.second}',
+        time,
+        platformChannelSpecifics);
+    print("DONE");
+
+
+  }
+
+
+  ////////
   _MenuPageState(this.analytics);
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -64,6 +101,12 @@ class _MenuPageState extends State<MenuPage> {
   initState() {
     super.initState();
     syncUserData();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = IOSInitializationSettings();
+    var initSettings = InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSettings,
+        onSelectNotification: onSelectNotification);
   }
 
   int _selectedOption = 0;
@@ -81,13 +124,6 @@ class _MenuPageState extends State<MenuPage> {
           style: new TextStyle(
               color: Colors.white, fontSize: 20, fontFamily: 'OpenSans'),
         ),
-//        leading: FlatButton(
-//          textColor: Colors.white,
-//          child: Icon(
-//            Icons.arrow_back,
-//          ),
-//          onPressed: () => print('Back'),
-//        ),
         actions: <Widget>[
           FlatButton(
             textColor: Colors.white,
@@ -106,7 +142,11 @@ class _MenuPageState extends State<MenuPage> {
         ],
       ),
       body:
-          ListView.builder(
+          Column(
+          children: <Widget>[
+            Image(image: AssetImage('assets/images/logo.jpg')),
+            new Expanded(
+            child: ListView.builder(
             itemCount: options.length + 2,
             itemBuilder: (BuildContext context, int index) {
               if (index == 0) {
@@ -149,18 +189,18 @@ class _MenuPageState extends State<MenuPage> {
                     setState(() {
                       _selectedOption = index - 1;
                       if (_selectedOption == 0) {
-                        NotificationManager2 notificationManager2 = NotificationManager2();
-                        notificationManager2.showNotification(17,10,0);
-                        notificationManager2.showNotification(00,09,1);
+
 
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 new MedicationPage()));
                       }
                       if (_selectedOption == 1) {
+
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 new appointmentPage()));
+                        showNotification();
                       }
                       if (_selectedOption == 2) {
                         Navigator.of(context).push(new MaterialPageRoute(
@@ -177,6 +217,9 @@ class _MenuPageState extends State<MenuPage> {
                 ),
               );
             },
+          ),
+            ),
+      ],
           ),
     );
   }

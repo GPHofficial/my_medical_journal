@@ -23,6 +23,10 @@ class MedicationController{
     return medication;
   }
 
+  Future<void> deleteMedication(String generatedId){
+    firestore.deleteDocument(generatedId);
+  }
+
   Future<Medication> editMedication(Medication updateMedication) async{
     Map<String,dynamic> medicationMap = (await firestore.updateDocument(updateMedication));
     Medication medication = Medication.castFromMap(medicationMap);
