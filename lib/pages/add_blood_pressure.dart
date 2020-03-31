@@ -22,11 +22,30 @@ class AddBloodPressureState extends State<AddBloodPressure>{
         return new Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: new AppBar(
-            backgroundColor: Colors.blue,
-            title: Text(
-              "Add Blood Pressure",
-              style: new TextStyle(
-                  color: Colors.white, fontSize: 25, fontFamily: 'OpenSans'),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.green,
+            flexibleSpace: new Container(
+              alignment: Alignment.center,
+              child: new Divider(
+                color: Colors.white,
+                thickness: 2,
+              ),
+            ),
+            bottom: PreferredSize(
+                child: new Container(), preferredSize: Size(100, 100)),
+            title: new Row(
+              children: <Widget>[
+                new IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new ViewBloodPressure())),
+                ),
+                new Text(
+                  "Add Blood Pressure",
+                  style: new TextStyle(
+                      color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),
+                ),
+              ],
             ),
           ),
           body: new Card(
@@ -77,7 +96,7 @@ class AddBloodPressureState extends State<AddBloodPressure>{
                       Padding(
                         padding: new EdgeInsets.all(0.0),
                         child: RaisedButton(
-                          color: Colors.blue,
+                          color: Colors.green,
                           elevation: 2,
                           onPressed: _submit,
                           child: Text("Save", style: TextStyle( color: Colors.white,)),
@@ -104,7 +123,6 @@ class AddBloodPressureState extends State<AddBloodPressure>{
       widget._newBloodPressure.setTime(formattedTime);
       BpController bpController = new BpController();
       bpController.addBp(widget._newBloodPressure);
-      widget._newBloodPressure.disp();
 
       Navigator.of(context).push(new MaterialPageRoute(
         builder: (BuildContext context) => new ViewBloodPressure()));

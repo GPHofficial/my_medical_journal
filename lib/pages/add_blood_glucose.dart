@@ -20,11 +20,30 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
         return new Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: new AppBar(
-            backgroundColor: Colors.blue,
-            title: Text(
-              "Add Blood Glucose",
-              style: new TextStyle(
-                  color: Colors.white, fontSize: 25, fontFamily: 'OpenSans'),
+            automaticallyImplyLeading: false,
+            backgroundColor: Colors.green,
+            flexibleSpace: new Container(
+              alignment: Alignment.center,
+              child: new Divider(
+                color: Colors.white,
+                thickness: 2,
+              ),
+            ),
+            bottom: PreferredSize(
+                child: new Container(), preferredSize: Size(100, 100)),
+            title: new Row(
+              children: <Widget>[
+                new IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new ViewBloodGlucose())),
+                ),
+                new Text(
+                  "Add Blood Glucose",
+                  style: new TextStyle(
+                      color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),
+                ),
+              ],
             ),
           ),
           body: new Card(
@@ -45,7 +64,7 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
                             return null;
                           },
                           onSaved: 
-                            (input) => widget._newBloodGlucose.setglucose(input),
+                            (input) => widget._newBloodGlucose.setGlucose(input),
                       ),
                         Row( // Save button
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -53,7 +72,7 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
                       Padding(
                         padding: new EdgeInsets.all(0.0),
                         child: RaisedButton(
-                          color: Colors.blue,
+                          color: Colors.green,
                           elevation: 2,
                           onPressed: _submit,
                           child: Text("Save", style: TextStyle( color: Colors.white,)),
@@ -74,6 +93,8 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
     if(_bgValue.currentState.validate()){
       _bgValue.currentState.save();
       DateTime now = DateTime.now().toLocal();
+      DateTime epoch = DateTime.fromMillisecondsSinceEpoch(1585288500000);
+      print("epoch: "+ epoch.toString());
       String formattedTime = DateFormat('kk:mm').format(now);
       String formattedDate = DateFormat('dd/MM').format(now);
       widget._newBloodGlucose.setDate(formattedDate);

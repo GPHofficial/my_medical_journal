@@ -25,7 +25,7 @@ class BloodGlucose implements EntityBase {
   String getId(){
     return this.id;
   }
-void setglucose (String glucose){
+void setGlucose (String glucose){
   this._glucose = glucose;
 }
 void setDate (String date){

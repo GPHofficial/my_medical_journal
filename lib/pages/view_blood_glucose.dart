@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_medical_journal/controller/bg_controller.dart';
 import 'package:my_medical_journal/entities/bloodGlucose.dart';
 import 'package:my_medical_journal/pages/add_blood_glucose.dart';
+import '../pages/list_health_vitals.dart';
 
 class ViewBloodGlucose extends StatefulWidget{
   ViewBloodGlucose({Key key, this.generatedId}) : super(key: key);
@@ -19,13 +20,6 @@ class ViewBloodGlucoseState extends State<ViewBloodGlucose>{
   BloodGlucose bg = new BloodGlucose.defaults();
   BgController bgController = new BgController();
 
-  void loadBgData(String generatedId)async{
-    BgController bgController = new BgController();
-    BloodGlucose retrievedBg = await bgController.getBg(generatedId);
-    setState(() {
-      bg = retrievedBg;
-    });
-  }
   void addToBgObserver() async{
    bgController.addBgObserver((List<BloodGlucose> bgList){
      updateBgItems(bgList);
@@ -70,14 +64,14 @@ class ViewBloodGlucoseState extends State<ViewBloodGlucose>{
       );
     return new Center(
       child: new Container(
-        color: Colors.white,
+        color: Colors.green,
         height: 85.0,
         child: new Card(
-        color: Colors.blue,
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
-          splashColor: Colors.blue.withAlpha(100),
+          splashColor: Colors.green.withAlpha(100),
           onTap:(){
             Navigator.of(context).push(new MaterialPageRoute(
               builder: (BuildContext context) => new ViewBloodGlucose(generatedId: bg.getId())
@@ -106,7 +100,31 @@ class ViewBloodGlucoseState extends State<ViewBloodGlucose>{
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: Text('Blood Glucose'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.green,
+        flexibleSpace: new Container(
+          alignment: Alignment.center,
+          child: new Divider(
+            color: Colors.white,
+            thickness: 2,
+          ),
+        ),
+        bottom: PreferredSize(
+            child: new Container(), preferredSize: Size(100, 100)),
+        title: new Row(
+          children: <Widget>[
+            new IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => new HealthVitalsPage())),
+            ),
+            new Text(
+              "Blood Glucose",
+              style: new TextStyle(
+                  color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),
+            ),
+          ],
+        ),
       ),
       body: new Column(
           children:<Widget>[
@@ -155,6 +173,7 @@ class ViewBloodGlucoseState extends State<ViewBloodGlucose>{
         onPressed: () => Navigator.of(context).push( MaterialPageRoute(
             builder: (BuildContext context) => AddBloodGlucose())),
         tooltip: 'Increment Counter',
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );

@@ -13,7 +13,7 @@ class BpController{
      observers = new List<Function>();
      listenObservers();
     }
-
+    
     void addBp(BloodPressure bp){
     firestore.createDocument(bp);
     }

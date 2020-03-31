@@ -68,11 +68,4 @@ void setTime (String time){
     this.id = map["id"];
   }
   
-  void disp(){
-    print("Diastolic: "+ diastolic);
-    print("Systolic: "+ systolic);
-    print("Heart Rate: "+ heartRate);
-    print("Date: "+ date);
-    print("Time: "+ time);
-  }
 }

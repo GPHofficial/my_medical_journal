@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:my_medical_journal/controller/bp_controller.dart';
 import '../entities/bloodPressure.dart';
 import 'add_blood_pressure.dart';
+import '../pages/list_health_vitals.dart';
 
 class ViewBloodPressure extends StatefulWidget{
   ViewBloodPressure({Key key, this.generatedId}) : super(key: key);
@@ -19,13 +20,6 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
   BloodPressure bp = new BloodPressure.defaults();
   BpController bpController = new BpController();
 
-  void loadBpData(String generatedId)async{
-    BpController bpController = new BpController();
-    BloodPressure retrievedBp = await bpController.getBp(generatedId);
-    setState(() {
-      bp = retrievedBp;
-    });
-  }
   void addToBpObserver() async{
    bpController.addBpObserver((List<BloodPressure> bpList){
      updateBpItems(bpList);
@@ -88,14 +82,14 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
       );
     return new Center(
       child: new Container(
-        color: Colors.white,
+        color: Colors.green,
         height: 85.0,
         child: new Card(
-        color: Colors.blue,
+        color: Colors.white,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: InkWell(
-          splashColor: Colors.blue.withAlpha(100),
+          splashColor: Colors.green.withAlpha(100),
           onTap:(){
             Navigator.of(context).push(new MaterialPageRoute(
               builder: (BuildContext context) => new ViewBloodPressure(generatedId: bp.getId())
@@ -126,7 +120,32 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
   Widget build(BuildContext context) {
     return new Scaffold(
       appBar: new AppBar(
-        title: Text('Blood Pressure'),
+        //title: Text('Blood Pressure'),
+        automaticallyImplyLeading: false,
+        backgroundColor: Colors.green,
+        flexibleSpace: new Container(
+          alignment: Alignment.center,
+          child: new Divider(
+            color: Colors.white,
+            thickness: 2,
+          ),
+        ),
+        bottom: PreferredSize(
+            child: new Container(), preferredSize: Size(100, 100)),
+        title: new Row(
+          children: <Widget>[
+            new IconButton(
+              icon: Icon(Icons.arrow_back),
+              onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => new HealthVitalsPage())),
+            ),
+            new Text(
+              "Blood Pressure",
+              style: new TextStyle(
+                  color: Colors.white, fontSize: 30, fontFamily: 'OpenSans'),
+            ),
+          ],
+        ),
       ),
       body: new Column(
           children:<Widget>[
@@ -181,6 +200,7 @@ class ViewBloodPressureState extends State<ViewBloodPressure>{
         onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
             builder: (BuildContext context) => new AddBloodPressure())),
         tooltip: 'Increment Counter',
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
     );
