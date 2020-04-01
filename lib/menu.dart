@@ -84,7 +84,6 @@ class _MenuPageState extends State<MenuPage> {
   _MenuPageState(this.analytics);
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
-
   final FirebaseAnalytics analytics;
 
   int _firebaseCheckStatus = 0;

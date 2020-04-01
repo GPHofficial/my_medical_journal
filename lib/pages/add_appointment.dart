@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_medical_journal/controller/appointment_controller.dart';
 import '../entities/appointment.dart';
 import 'list_appointment.dart';
-import '../appointment_manager.dart';
 //Email
 import 'package:mailer/mailer.dart';
 import 'package:mailer/smtp_server/mailgun.dart';
@@ -225,7 +224,6 @@ class AddAppointmentState extends State<AddAppointment> {
     if (_formKey.currentState.validate()) {
       _formKey.currentState.save();
       widget._newAppointment.disp();
-      AppointmentManager manager = new AppointmentManager();
 
       AppointmentController appointmentController = new AppointmentController();
 

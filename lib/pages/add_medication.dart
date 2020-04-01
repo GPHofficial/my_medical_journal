@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_medical_journal/controller/medication_controller.dart';
 import '../entities/medication.dart';
 import 'list_medication.dart';
-import '../medication_manager.dart';
 
 class AddMedication extends StatefulWidget {
 
@@ -13,7 +12,6 @@ class AddMedication extends StatefulWidget {
 }
 
 class AddMedicationState extends State<AddMedication> {
-
   bool mornVal=false;
   bool afternoonVal=false;
   bool nightVal=false;
@@ -256,7 +254,6 @@ class AddMedicationState extends State<AddMedication> {
 
       _formKey.currentState.save();
       widget._newMedication.disp();
-      MedicationManager manager = new MedicationManager();
        
       MedicationController medicationController = new MedicationController();
       if(generatedId == null){
