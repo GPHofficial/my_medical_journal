@@ -39,11 +39,13 @@ class HealthVitalsPageState extends State<HealthVitalsPage>{
           children: <Widget>[
             RaisedButton(
               child: const Text('Blood Pressure'),
+              color: Colors.white,
               onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new ViewBloodPressure())),
               ),
             RaisedButton(
               child: const Text('Blood Glucose'),
+              color: Colors.white,
               onPressed: () => Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new ViewBloodGlucose())),
               ),

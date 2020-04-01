@@ -26,13 +26,7 @@ class AddBloodPressureState extends State<AddBloodPressure>{
             backgroundColor: Colors.green,
             flexibleSpace: new Container(
               alignment: Alignment.center,
-              child: new Divider(
-                color: Colors.white,
-                thickness: 2,
-              ),
             ),
-            bottom: PreferredSize(
-                child: new Container(), preferredSize: Size(100, 100)),
             title: new Row(
               children: <Widget>[
                 new IconButton(
@@ -90,6 +84,28 @@ class AddBloodPressureState extends State<AddBloodPressure>{
                           onSaved:
                             (input) => widget._newBloodPressure.setHeartrate(input),    
                         ),
+                        TextFormField( // enter date
+                        decoration: InputDecoration(
+                          labelText: 'Date'
+                          ),
+                          validator: (input){
+                            if(input.isEmpty) return "Enter Date";
+                            return null;
+                          },
+                          onSaved:
+                            (input) => widget._newBloodPressure.setDate(input),    
+                        ),
+                        TextFormField( // enter time
+                        decoration: InputDecoration(
+                          labelText: 'Time'
+                          ),
+                          validator: (input){
+                            if(input.isEmpty) return "Enter Time";
+                            return null;
+                          },
+                          onSaved:
+                            (input) => widget._newBloodPressure.setTime(input),    
+                        ),
                         Row( // Save button
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -116,11 +132,11 @@ class AddBloodPressureState extends State<AddBloodPressure>{
   void _submit(){
     if(_bpValue.currentState.validate()){
       _bpValue.currentState.save();
-      DateTime now = DateTime.now().toLocal();
-      String formattedTime = DateFormat('kk:mm').format(now);
-      String formattedDate = DateFormat('dd/MM').format(now);
-      widget._newBloodPressure.setDate(formattedDate);
-      widget._newBloodPressure.setTime(formattedTime);
+      //DateTime now = DateTime.now().toLocal();
+      //String formattedTime = DateFormat('kk:mm').format(now);
+      //String formattedDate = DateFormat('dd/MM').format(now);
+      //widget._newBloodPressure.setDate(formattedDate);
+      //widget._newBloodPressure.setTime(formattedTime);
       BpController bpController = new BpController();
       bpController.addBp(widget._newBloodPressure);
 

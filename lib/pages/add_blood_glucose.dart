@@ -24,13 +24,7 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
             backgroundColor: Colors.green,
             flexibleSpace: new Container(
               alignment: Alignment.center,
-              child: new Divider(
-                color: Colors.white,
-                thickness: 2,
-              ),
             ),
-            bottom: PreferredSize(
-                child: new Container(), preferredSize: Size(100, 100)),
             title: new Row(
               children: <Widget>[
                 new IconButton(
@@ -66,6 +60,28 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
                           onSaved: 
                             (input) => widget._newBloodGlucose.setGlucose(input),
                       ),
+                      TextFormField( // enter date
+                        decoration: InputDecoration(
+                          labelText: 'Date'
+                          ),
+                          validator: (input){
+                            if (input.isEmpty) return "Enter Date";
+                            return null;
+                          },
+                          onSaved: 
+                            (input) => widget._newBloodGlucose.setDate(input),
+                      ),
+                      TextFormField( // enter time
+                        decoration: InputDecoration(
+                          labelText: 'Time'
+                          ),
+                          validator: (input){
+                            if (input.isEmpty) return "Enter Time";
+                            return null;
+                          },
+                          onSaved: 
+                            (input) => widget._newBloodGlucose.setTime(input),
+                      ),
                         Row( // Save button
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
@@ -92,13 +108,12 @@ class AddBloodGlucoseState extends State<AddBloodGlucose>{
   void _submit(){
     if(_bgValue.currentState.validate()){
       _bgValue.currentState.save();
-      DateTime now = DateTime.now().toLocal();
-      DateTime epoch = DateTime.fromMillisecondsSinceEpoch(1585288500000);
-      print("epoch: "+ epoch.toString());
-      String formattedTime = DateFormat('kk:mm').format(now);
-      String formattedDate = DateFormat('dd/MM').format(now);
-      widget._newBloodGlucose.setDate(formattedDate);
-      widget._newBloodGlucose.setTime(formattedTime);
+      //DateTime now = DateTime.now().toLocal();
+      //DateTime epoch = DateTime.fromMillisecondsSinceEpoch(1585288500000);
+      //String formattedTime = DateFormat('kk:mm').format(now);
+     // String formattedDate = DateFormat('dd/MM').format(now);
+      //widget._newBloodGlucose.setDate(formattedDate);
+      //widget._newBloodGlucose.setTime(formattedTime);
       BgController bgController = new BgController();
       bgController.addBg(widget._newBloodGlucose);
 
