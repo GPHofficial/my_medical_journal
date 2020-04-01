@@ -47,7 +47,7 @@ class Clinic implements EntityBase{
   );
 
   Clinic.castFromMap(Map<String,dynamic> map){
-
+    this.id = map["id"];
     this.ADDR_TYPE = map["ADDR_TYPE"];
     this.BLK_HSE_NO = map["BLK_HSE_NO"];
     this.BUILDING_NAME = map["BUILDING_NAME"];
