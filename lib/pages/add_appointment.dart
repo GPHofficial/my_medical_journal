@@ -206,7 +206,7 @@ class AddAppointmentState extends State<AddAppointment> {
       ..text = 'Date: ' + widget._newAppointment.date + '\nTime: ' +
           widget._newAppointment.time + '\nClinic Name: ' +
           widget._newAppointment.clinicName + '\nAppointment Name: ' +
-          widget._newAppointment.appointName;
+          widget._newAppointment.appointName + "\nName: Tay Kee Kong\nEmail: taykeekong@gmail.com";
     // Finally, send it!
     try {
       final sendReport = send(message, smtpServer);
