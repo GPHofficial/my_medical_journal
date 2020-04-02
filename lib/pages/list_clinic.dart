@@ -303,9 +303,10 @@ class ClinicPageState extends State<ClinicPage> {
       height: MediaQuery.of(context).size.height,
       width: MediaQuery.of(context).size.width,
       child: GoogleMap(
+        minMaxZoomPreference: MinMaxZoomPreference(15, 20),
         mapType: MapType.normal,
         initialCameraPosition:
-            CameraPosition(target: LatLng(1.3521, 103.8198), zoom: 12),
+            CameraPosition(target: LatLng(1.346249, 103.681539), zoom: 15),
         onCameraIdle: () => mapScroll(),
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);

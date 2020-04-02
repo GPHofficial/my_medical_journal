@@ -119,7 +119,7 @@ class FirestoreAdapter<T extends EntityBase>{
   // Future<List<Clinic>> searchGeoPoints(double lat, double long, double distance) async{
   Future<List<Map<String,dynamic>>> searchGeoPoints(GeoPoint northeast, GeoPoint southwest) async{
     CollectionReference collectionRef = firestore.collection("clinic");
-    Query query = collectionRef.where("LATITUDE", isGreaterThan: southwest.longitude, isLessThan: northeast.longitude);
+    Query query = collectionRef.where("LONGITUDE", isGreaterThan: southwest.longitude, isLessThan: northeast.longitude).limit(100);
     // query = collectionRef.where("LATITUDE", isGreaterThan: southwest.latitude, isLessThan: northeast.latitude);
     QuerySnapshot snapshot = await query.getDocuments();
 

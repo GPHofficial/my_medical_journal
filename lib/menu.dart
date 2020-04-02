@@ -90,10 +90,10 @@ class _MenuPageState extends State<MenuPage> {
 
 
   Future<void> syncUserData() async {
-    final FirebaseUser currentUser = await _auth.currentUser();
-    UserController uc = new UserController();
-    uc.addOrUpdateUser(currentUser.uid, currentUser.displayName,
-        currentUser.email, currentUser.photoUrl);
+    // final FirebaseUser currentUser = await _auth.currentUser();
+    // UserController uc = new UserController();
+    // uc.addOrUpdateUser(currentUser.uid, currentUser.displayName,
+    //     currentUser.email, currentUser.photoUrl);
   }
 
   @override
