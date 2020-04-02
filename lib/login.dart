@@ -12,6 +12,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 // Firebase Auth
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 
 
@@ -19,7 +20,7 @@ class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.analytics}) : super(key: key);
 
 
-  final String title = "Login";
+  final String title = "My Medical Journal";
   final FirebaseAnalytics analytics;
 
   // This widget is the home page of your application. It is stateful, meaning
@@ -129,27 +130,62 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        automaticallyImplyLeading: false,
+        title: Text(widget.title,style: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+
+            fontFamily: "OpenSans"),),
       ),
       body: Builder(
-        builder: (context) => 
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+        builder: (context) =>
+          Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
+                Image(image: AssetImage('assets/images/logo2.jpg')),
+                Text("Welcome to My Medical Journal,\n A One Stop App for all your medical needs!",style: TextStyle(color:Colors.green,fontSize: 20,),),
+                Container(
+                  height:200,
+                ),
                 GoogleSignInButton(
                   onPressed: () async {
                   bool success = await _handleGoogleSignInBtn();
                   if(success == null) return;
-                  SnackBar snackBar = SnackBar(content: Text( success ? 
-                      'Successfully signed in, ' +  name : 
-                      'Sign in failed')
-                  );
-                  Scaffold.of(context).showSnackBar(snackBar);
-                  if(success == false) return;
-                  Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
+                 if(success==true){
+                   print("LOGIN SUCCESS!");
+                   Fluttertoast.showToast(
+                       msg: "Welcome, "+ name,
+                       toastLength: Toast.LENGTH_SHORT,
+                       gravity: ToastGravity.BOTTOM,
+                       timeInSecForIosWeb: 1,
+                       backgroundColor: Colors.black54,
+                       textColor: Colors.white,
+                       fontSize: 16.0
+                   );
+                   Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
+                 }
+                  if(success == false){
+                    Fluttertoast.showToast(
+                        msg: "Login Failed, Try again!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.CENTER,
+                        timeInSecForIosWeb: 1,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white,
+                        fontSize: 16.0);
+                   print("LOGIN FAIL!");
+                   return;
+                  }
+
                 }
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Image(image: AssetImage('assets/images/thumb.png'),width:200,),
+                  ],
+                )
+
                 // RaisedButton(
                 //   child: const Text('Use as Guest'),
                 //   onPressed: () {
@@ -167,7 +203,7 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
         ),
-      )
+
     );
   }
 }
