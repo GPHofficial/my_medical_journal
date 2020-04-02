@@ -25,6 +25,8 @@ class Clinic implements EntityBase{
   String X_COORDINATE ;
   String Y_COORDINATE ;
 
+  Clinic();
+
   Clinic.setAll(
     this.ADDR_TYPE,
     this.BLK_HSE_NO,
@@ -67,8 +69,8 @@ class Clinic implements EntityBase{
     this.X_COORDINATE = map["X_COORDINATE"];
     this.Y_COORDINATE = map["Y_COORDINATE"];
 
-    this.LONGITUDE = map["LATITUDE"];
-    this.LATITUDE = map["LONGITUDE"];
+    this.LATITUDE = map["LATITUDE"];
+    this.LONGITUDE = map["LONGITUDE"];
 
   }
 
