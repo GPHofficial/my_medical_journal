@@ -4,6 +4,7 @@ import xml.etree.ElementTree as ET
 import firebase_admin
 from firebase_admin import credentials
 from firebase_admin import firestore
+from random import shuffle
 
 # export GOOGLE_APPLICATION_CREDENTIALS="/home/gphofficial/dev/SE2006/my_medical_journal/CHASClinic/firestore-key.json"
 firebase_admin.initialize_app()
@@ -40,15 +41,23 @@ for feature in gj['features']:
 
     
 
-    table['LATITUDE'] = feature['geometry']['coordinates'][0]
-    table['LONGITUDE'] = feature['geometry']['coordinates'][1]
-
+    table['LATITUDE'] = feature['geometry']['coordinates'][1]
+    table['LONGITUDE'] = feature['geometry']['coordinates'][0]
+    
     allCHASTable = allCHASTable + [table]
 
 size = len(allCHASTable)
+
+
+shuffle(allCHASTable)
+
+
 count = 1
-for table in allCHASTable:
-    db.collection(u'clinic').document(table['HCI_CODE']).set(table, merge=True)
+for i in range(len(allCHASTable)):
+    table = allCHASTable[i]
+    if(i%4==0):
+        # print(table)
+        db.collection(u'clinic').document(table['HCI_CODE']).set(table, merge=True)
     print(str(count) + " of " + str(size))
     count = count + 1
 
