@@ -13,8 +13,8 @@ class MedicationPage extends StatefulWidget {
 
 class MedicationPageState extends State<MedicationPage> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  int hour_morn = 9;
-  int minute_morn= 50;
+  int hour_morn = 10;
+  int minute_morn= 6;
   int hour_afternoon = 14;
   int minute_afternoon= 10;
   int hour_night= 9;
@@ -84,9 +84,9 @@ class MedicationPageState extends State<MedicationPage> {
       //print(medication);
       setState(() {
 
-        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_morn,minute_morn, medication);}
-        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_afternoon,minute_afternoon, medication);}
-        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_night,minute_night, medication);}
+        if(medication.reminders[0] == true) {showNotification(hour_morn,minute_morn,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_morn,minute_morn, medication);}
+        if(medication.reminders[1] == true) {showNotification(hour_afternoon,minute_afternoon,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_afternoon,minute_afternoon, medication);}
+        if(medication.reminders[2] == true) {showNotification(hour_night,minute_night,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_night,minute_night, medication);}
         listItems.add(createMedicationCard(medication, context));
       });
     }

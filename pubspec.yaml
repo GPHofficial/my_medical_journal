@@ -20,6 +20,8 @@ dependencies:
   flutter:
     sdk: flutter
   url_launcher: ^5.0.3
+  flutter_launcher_icons: ^0.7.0
+  fluttertoast: ^4.0.0
   flutter_localizations:
     sdk: flutter
   mailer: any
