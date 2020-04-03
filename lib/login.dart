@@ -14,11 +14,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-
-
 class LoginPage extends StatefulWidget {
   LoginPage({Key key, this.analytics}) : super(key: key);
-
 
   final String title = "My Medical Journal";
   final FirebaseAnalytics analytics;
@@ -47,22 +44,19 @@ class _LoginPageState extends State<LoginPage> {
   bool success = false;
   String name = "";
 
-
-
-   void _handleGuestSignInBtn() async {
-      await analytics.logLogin(loginMethod:"LoginAttempt-Guest");
-      _signInAnonymously().then((FirebaseUser user){
-        analytics.logLogin(loginMethod:"LoginSuccess-Guest");
-        setState(() {
-          success = true;
-        });
-      }).catchError((e){ 
-          analytics.logLogin(loginMethod:"LoginFailure-Guest");
-          setState(() {
-            success = false;
-          });
+  void _handleGuestSignInBtn() async {
+    await analytics.logLogin(loginMethod: "LoginAttempt-Guest");
+    _signInAnonymously().then((FirebaseUser user) {
+      analytics.logLogin(loginMethod: "LoginSuccess-Guest");
+      setState(() {
+        success = true;
       });
-      
+    }).catchError((e) {
+      analytics.logLogin(loginMethod: "LoginFailure-Guest");
+      setState(() {
+        success = false;
+      });
+    });
   }
 
   Future<FirebaseUser> _signInAnonymously() async {
@@ -88,18 +82,18 @@ class _LoginPageState extends State<LoginPage> {
     assert(user.uid == currentUser.uid);
     return user;
   }
-  
 
-  
   Future<FirebaseUser> _handleGoogleSignIn() async {
     final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    final GoogleSignInAuthentication googleAuth =
+        await googleUser.authentication;
     final AuthCredential credential = GoogleAuthProvider.getCredential(
       accessToken: googleAuth.accessToken,
       idToken: googleAuth.idToken,
     );
 
-    final FirebaseUser user = (await _auth.signInWithCredential(credential)).user;
+    final FirebaseUser user =
+        (await _auth.signInWithCredential(credential)).user;
 
     assert(user.email != null);
     assert(user.displayName != null);
@@ -111,19 +105,19 @@ class _LoginPageState extends State<LoginPage> {
     return user;
   }
 
-    Future<bool> _handleGoogleSignInBtn() async{
-      analytics.logLogin(loginMethod:"LoginAttempt-Google");
-      FirebaseUser user = await _handleGoogleSignIn().catchError((e){ 
-          analytics.logLogin(loginMethod:"LoginFailure-Google");
-          return false;
-      });
-      
-      analytics.setUserId(user.uid);
-      analytics.logLogin(loginMethod:"LoginSuccess-Google");
-      setState(() {
-        name = user.displayName;
-      });
-      return true;
+  Future<bool> _handleGoogleSignInBtn() async {
+    analytics.logLogin(loginMethod: "LoginAttempt-Google");
+    FirebaseUser user = await _handleGoogleSignIn().catchError((e) {
+      analytics.logLogin(loginMethod: "LoginFailure-Google");
+      return false;
+    });
+
+    analytics.setUserId(user.uid);
+    analytics.logLogin(loginMethod: "LoginSuccess-Google");
+    setState(() {
+      name = user.displayName;
+    });
+    return true;
   }
 
   @override
@@ -131,79 +125,83 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
-        title: Text(widget.title,style: TextStyle(
-            color: Colors.white,
-            fontSize: 30,
-
-            fontFamily: "OpenSans"),),
+        title: Text(
+          widget.title,
+          style: TextStyle(
+              color: Colors.white, fontSize: 30, fontFamily: "OpenSans"),
+        ),
       ),
       body: Builder(
-        builder: (context) =>
-          Column(
+        builder: (context) => Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Image(image: AssetImage('assets/images/logo2.jpg')),
+            Text(
+              "Welcome to My Medical Journal,\n A One Stop App for all your medical needs!",
+              style: TextStyle(
+                color: Colors.green,
+                fontSize: 20,
+              ),
+            ),
+            Container(
+              height: 200,
+            ),
+            GoogleSignInButton(onPressed: () async {
+              bool success = await _handleGoogleSignInBtn();
+              if (success == null) return;
+              if (success == true) {
+                print("LOGIN SUCCESS!");
+                Fluttertoast.showToast(
+                    msg: "Welcome, " + name,
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.BOTTOM,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.black54,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                Navigator.pushReplacementNamed(context, "/menu",
+                    arguments: {this.analytics});
+              }
+              if (success == false) {
+                Fluttertoast.showToast(
+                    msg: "Login Failed, Try again!",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: Colors.red,
+                    textColor: Colors.white,
+                    fontSize: 16.0);
+                print("LOGIN FAIL!");
+                return;
+              }
+            }),
+            Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Image(image: AssetImage('assets/images/logo2.jpg')),
-                Text("Welcome to My Medical Journal,\n A One Stop App for all your medical needs!",style: TextStyle(color:Colors.green,fontSize: 20,),),
-                Container(
-                  height:200,
+                Image(
+                  image: AssetImage('assets/images/thumb.png'),
+                  width: 200,
                 ),
-                GoogleSignInButton(
-                  onPressed: () async {
-                  bool success = await _handleGoogleSignInBtn();
-                  if(success == null) return;
-                 if(success==true){
-                   print("LOGIN SUCCESS!");
-                   Fluttertoast.showToast(
-                       msg: "Welcome, "+ name,
-                       toastLength: Toast.LENGTH_SHORT,
-                       gravity: ToastGravity.BOTTOM,
-                       timeInSecForIosWeb: 1,
-                       backgroundColor: Colors.black54,
-                       textColor: Colors.white,
-                       fontSize: 16.0
-                   );
-                   Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
-                 }
-                  if(success == false){
-                    Fluttertoast.showToast(
-                        msg: "Login Failed, Try again!",
-                        toastLength: Toast.LENGTH_SHORT,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.red,
-                        textColor: Colors.white,
-                        fontSize: 16.0);
-                   print("LOGIN FAIL!");
-                   return;
-                  }
-
-                }
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: <Widget>[
-                    Image(image: AssetImage('assets/images/thumb.png'),width:200,),
-                  ],
-                )
-
-                // RaisedButton(
-                //   child: const Text('Use as Guest'),
-                //   onPressed: () {
-                //     _handleGuestSignInBtn();
-                //     if(success == null) return;
-                //     SnackBar snackBar = SnackBar(content: Text( success ? 
-                //       'Successfully signed in as Guest.': 
-                //       'Sign in failed')
-                //     );
-                //     Scaffold.of(context).showSnackBar(snackBar);
-                //     if(success == false) return;
-                //     Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
-                //   },
-                // ),
               ],
-            ),
-        ),
+            )
 
+            // RaisedButton(
+            //   child: const Text('Use as Guest'),
+            //   onPressed: () {
+            //     _handleGuestSignInBtn();
+            //     if(success == null) return;
+            //     SnackBar snackBar = SnackBar(content: Text( success ?
+            //       'Successfully signed in as Guest.':
+            //       'Sign in failed')
+            //     );
+            //     Scaffold.of(context).showSnackBar(snackBar);
+            //     if(success == false) return;
+            //     Navigator.pushReplacementNamed(context,"/menu",arguments:{this.analytics});
+            //   },
+            // ),
+          ],
+        ),
+      ),
     );
   }
 }

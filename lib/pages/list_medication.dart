@@ -13,6 +13,12 @@ class MedicationPage extends StatefulWidget {
 
 class MedicationPageState extends State<MedicationPage> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  int hour_morn = 9;
+  int minute_morn= 50;
+  int hour_afternoon = 14;
+  int minute_afternoon= 10;
+  int hour_night= 9;
+  int minute_night= 0;
 
   Future onSelectNotification(String payload) {
     showDialog(
@@ -77,9 +83,10 @@ class MedicationPageState extends State<MedicationPage> {
     for (var medication in medicationList) {
       //print(medication);
       setState(() {
-        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,medication.dosage,count);count++;}
-        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,medication.dosage,count);count++;}
-        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,medication.dosage,count);count++;}
+
+        if(medication.reminders[0] == true) {showNotification(8,0,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_morn,minute_morn, medication);}
+        if(medication.reminders[1] == true) {showNotification(12,0,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_afternoon,minute_afternoon, medication);}
+        if(medication.reminders[2] == true) {showNotification(20,0,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_night,minute_night, medication);}
         listItems.add(createMedicationCard(medication, context));
       });
     }
@@ -91,6 +98,28 @@ class MedicationPageState extends State<MedicationPage> {
     updateMedicationItems(medicationList);
   }
 
+  void reduceQuantity(int hour,int minute,Medication medication) async{
+    var now = new DateTime.now();
+    if(now.hour == hour && now.minute==minute){
+      MedicationController medicationControllertemp = MedicationController();
+      var old = medication.quantity;
+      if(old<=0){
+        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+            'your channel id', 'your channel name', 'your channel description',
+            importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+        var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+        var platformChannelSpecifics = NotificationDetails(
+            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        await flutterLocalNotificationsPlugin.show(
+            0, 'Medication Low, Replenish!', medication.medication, platformChannelSpecifics,
+            payload: "item");
+      }
+      print("REDUCING: "+medication.medication);
+      medication.setQuantity(old-1);
+      medicationControllertemp.editMedication(medication);
+
+    }
+  }
   Widget createMedicationCard(Medication medication, dynamic context) {
     return new Center(
       child: new Container(
