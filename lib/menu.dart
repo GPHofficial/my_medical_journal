@@ -23,7 +23,7 @@ import 'pages/list_appointment.dart';
 import 'pages/list_health_vitals.dart';
 import 'adapters/option_model.dart';
 
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 class MenuPage extends StatefulWidget {
   MenuPage({Key key, this.analytics}) : super(key: key);
@@ -46,7 +46,7 @@ class MenuPage extends StatefulWidget {
 
 class _MenuPageState extends State<MenuPage> {
 
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
 
   Future onSelectNotification(String payload) {
     showDialog(
@@ -57,27 +57,27 @@ class _MenuPageState extends State<MenuPage> {
         ));
   }
 
-  showNotification() async {
-    var time = Time(17, 59 , 0);
-    var androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  // showNotification() async {
+  //   var time = Time(17, 59 , 0);
+  //   var androidPlatformChannelSpecifics =
+  //   AndroidNotificationDetails('repeatDailyAtTime channel id',
+  //       'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
+  //   var iOSPlatformChannelSpecifics =
+  //   IOSNotificationDetails();
+  //   var platformChannelSpecifics = NotificationDetails(
+  //       androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        0,
-        "wassup",
-        'Daily notification shown at approximately ${time.hour}:${time
-            .minute}:${time.second}',
-        time,
-        platformChannelSpecifics);
-    print("DONE");
+    // await flutterLocalNotificationsPlugin.showDailyAtTime(
+    //     0,
+    //     "wassup",
+    //     'Daily notification shown at approximately ${time.hour}:${time
+    //         .minute}:${time.second}',
+    //     time,
+    //     platformChannelSpecifics);
+    // print("DONE");
 
 
-  }
+  // }
 
 
   ////////
@@ -100,12 +100,12 @@ class _MenuPageState extends State<MenuPage> {
   initState() {
     super.initState();
     syncUserData();
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOS = IOSInitializationSettings();
-    var initSettings = InitializationSettings(android, iOS);
-    flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: onSelectNotification);
+    // flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    // var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // var iOS = IOSInitializationSettings();
+    // var initSettings = InitializationSettings(android, iOS);
+    // flutterLocalNotificationsPlugin.initialize(initSettings,
+    //     onSelectNotification: onSelectNotification);
   }
 
   int _selectedOption = 0;
@@ -199,7 +199,7 @@ class _MenuPageState extends State<MenuPage> {
                         Navigator.of(context).push(new MaterialPageRoute(
                             builder: (BuildContext context) =>
                                 new AppointmentPage()));
-                        showNotification();
+                        // showNotification();
                       }
                       if (_selectedOption == 2) {
                         Navigator.of(context).push(new MaterialPageRoute(

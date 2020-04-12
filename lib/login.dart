@@ -144,7 +144,7 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             Container(
-              height: 200,
+              height: 030,
             ),
             GoogleSignInButton(onPressed: () async {
               bool success = await _handleGoogleSignInBtn();

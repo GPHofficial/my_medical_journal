@@ -3,7 +3,7 @@ import 'package:my_medical_journal/controller/medication_controller.dart';
 import 'package:my_medical_journal/entities/medication.dart';
 import 'package:my_medical_journal/pages/view_medication.dart';
 import 'add_medication.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+// import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import '../menu.dart';
 
 class MedicationPage extends StatefulWidget {
@@ -12,55 +12,55 @@ class MedicationPage extends StatefulWidget {
 }
 
 class MedicationPageState extends State<MedicationPage> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
-  int hour_morn = 10;
-  int minute_morn= 6;
-  int hour_afternoon = 14;
-  int minute_afternoon= 10;
-  int hour_night= 9;
-  int minute_night= 0;
+  // FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  // int hour_morn = 10;
+  // int minute_morn= 6;
+  // int hour_afternoon = 14;
+  // int minute_afternoon= 10;
+  // int hour_night= 9;
+  // int minute_night= 0;
 
-  Future onSelectNotification(String payload) {
-    showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          title: Text("ALERT"),
-          content: Text("CONTENT: $payload"),
-        ));
-  }
+  // Future onSelectNotification(String payload) {
+  //   showDialog(
+  //       context: context,
+  //       builder: (_) => AlertDialog(
+  //         title: Text("ALERT"),
+  //         content: Text("CONTENT: $payload"),
+  //       ));
+  // }
 
-  showNotification(int hour,int minute,String name,int dosage,int index) async{
-    var time = Time(hour,minute , 0);
-    var androidPlatformChannelSpecifics =
-    AndroidNotificationDetails('repeatDailyAtTime channel id',
-        'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
-    var iOSPlatformChannelSpecifics =
-    IOSNotificationDetails();
-    var platformChannelSpecifics = NotificationDetails(
-        androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+  // showNotification(int hour,int minute,String name,int dosage,int index) async{
+    // var time = Time(hour,minute , 0);
+    // var androidPlatformChannelSpecifics =
+    // AndroidNotificationDetails('repeatDailyAtTime channel id',
+    //     'repeatDailyAtTime channel name', 'repeatDailyAtTime description');
+    // var iOSPlatformChannelSpecifics =
+    // IOSNotificationDetails();
+    // var platformChannelSpecifics = NotificationDetails(
+    //     androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
 
-    await flutterLocalNotificationsPlugin.showDailyAtTime(
-        index,
-        "Take Medication: "+name,
-        "Take Amount: "+dosage.toString(),
-        time,
-        platformChannelSpecifics);
-    print("DONE");
+    // await flutterLocalNotificationsPlugin.showDailyAtTime(
+    //     index,
+    //     "Take Medication: "+name,
+    //     "Take Amount: "+dosage.toString(),
+    //     time,
+    //     platformChannelSpecifics);
+    // print("DONE");
 
 
-  }
+  // }
 
   @override
   void initState() {
     super.initState();
     retrieveMedicationUpdate();
     addToObserver();
-    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
-    var android = AndroidInitializationSettings('@mipmap/ic_launcher');
-    var iOS = IOSInitializationSettings();
-    var initSettings = InitializationSettings(android, iOS);
-    flutterLocalNotificationsPlugin.initialize(initSettings,
-        onSelectNotification: onSelectNotification);
+    // flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    // var android = AndroidInitializationSettings('@mipmap/ic_launcher');
+    // var iOS = IOSInitializationSettings();
+    // var initSettings = InitializationSettings(android, iOS);
+    // flutterLocalNotificationsPlugin.initialize(initSettings,
+    //     onSelectNotification: onSelectNotification);
   }
 
   static List<Widget> listItems = [];
@@ -84,9 +84,9 @@ class MedicationPageState extends State<MedicationPage> {
       //print(medication);
       setState(() {
 
-        if(medication.reminders[0] == true) {showNotification(hour_morn,minute_morn,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_morn,minute_morn, medication);}
-        if(medication.reminders[1] == true) {showNotification(hour_afternoon,minute_afternoon,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_afternoon,minute_afternoon, medication);}
-        if(medication.reminders[2] == true) {showNotification(hour_night,minute_night,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_night,minute_night, medication);}
+        // if(medication.reminders[0] == true) {showNotification(hour_morn,minute_morn,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_morn,minute_morn, medication);}
+        // if(medication.reminders[1] == true) {showNotification(hour_afternoon,minute_afternoon,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_afternoon,minute_afternoon, medication);}
+        // if(medication.reminders[2] == true) {showNotification(hour_night,minute_night,medication.medication,medication.dosage,count);count++;reduceQuantity(hour_night,minute_night, medication);}
         listItems.add(createMedicationCard(medication, context));
       });
     }
@@ -104,15 +104,15 @@ class MedicationPageState extends State<MedicationPage> {
       MedicationController medicationControllertemp = MedicationController();
       var old = medication.quantity;
       if(old<=0){
-        var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-            'your channel id', 'your channel name', 'your channel description',
-            importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
-        var iOSPlatformChannelSpecifics = IOSNotificationDetails();
-        var platformChannelSpecifics = NotificationDetails(
-            androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
-        await flutterLocalNotificationsPlugin.show(
-            0, 'Medication Low, Replenish!', medication.medication, platformChannelSpecifics,
-            payload: "item");
+        // var androidPlatformChannelSpecifics = AndroidNotificationDetails(
+        //     'your channel id', 'your channel name', 'your channel description',
+        //     importance: Importance.Max, priority: Priority.High, ticker: 'ticker');
+        // var iOSPlatformChannelSpecifics = IOSNotificationDetails();
+        // var platformChannelSpecifics = NotificationDetails(
+        //     androidPlatformChannelSpecifics, iOSPlatformChannelSpecifics);
+        // await flutterLocalNotificationsPlugin.show(
+        //     0, 'Medication Low, Replenish!', medication.medication, platformChannelSpecifics,
+        //     payload: "item");
       }
       print("REDUCING: "+medication.medication);
       medication.setQuantity(old-1);
