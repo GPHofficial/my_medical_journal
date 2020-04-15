@@ -15,6 +15,7 @@ class ClinicPageState extends State<ClinicPage> {
   ClinicController clinicController = new ClinicController();
   List<Clinic> containerClinics = new List<Clinic>();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
+  final ScrollController lvscrollController = ScrollController();
   
   @override
   void initState() {
@@ -55,10 +56,10 @@ class ClinicPageState extends State<ClinicPage> {
   }
 
   void mapScroll() async{
-    setState(() {
-        markers =  <MarkerId, Marker>{};
+    // setState(() {
+        // markers =  <MarkerId, Marker>{};
         
-      });
+      // });
 
     final GoogleMapController controller = await _controller.future;
     LatLngBounds boundary = await controller.getVisibleRegion();
@@ -74,12 +75,13 @@ class ClinicPageState extends State<ClinicPage> {
 
     for(var clinic in clinics){
       Marker newMarker = Marker(
-        markerId: MarkerId(clinic.HCI_NAME),
+        markerId: MarkerId(clinic.HCI_CODE),
         position: LatLng(clinic.LATITUDE, clinic.LONGITUDE),
-        infoWindow: InfoWindow(title: clinic.HCI_NAME),
+        infoWindow: InfoWindow(title: clinic.HCI_NAME, snippet: clinic.LICENCE_TYPE),
         icon: BitmapDescriptor.defaultMarkerWithHue(
           BitmapDescriptor.hueViolet,
         ),
+        onTap: () => {scrollToCard(clinic.HCI_CODE)}
       );
       MarkerId id = new MarkerId(clinic.getId());
       setState(() {
@@ -88,6 +90,21 @@ class ClinicPageState extends State<ClinicPage> {
       });
     }
     
+    
+  }
+
+  void scrollToCard(String code){
+    int index = -1;
+    for(int i = 0; i < containerClinics.length; i++){
+      if(containerClinics[i].HCI_CODE == code){
+        index = i;
+        break;
+      }
+    }
+    if(index == -1)
+      return;
+    
+    lvscrollController.animateTo(index * (300.0 + 10.0), duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
     
   }
 
@@ -134,6 +151,7 @@ class ClinicPageState extends State<ClinicPage> {
         margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 150.0,
         child: ListView.builder(
+          controller: lvscrollController,
           scrollDirection: Axis.horizontal,
           itemCount: containerClinics.length,
           itemBuilder: (context, position){
