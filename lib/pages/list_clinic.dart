@@ -315,29 +315,3 @@ class ClinicPageState extends State<ClinicPage> {
     )));
   }
 }
-
-Marker sghMarker = Marker(
-  markerId: MarkerId('sgh'),
-  position: LatLng(1.279525, 103.835915),
-  infoWindow: InfoWindow(title: 'Singapore General Hospital'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-
-Marker nuhMarker = Marker(
-  markerId: MarkerId('National University Hospital'),
-  position: LatLng(1.293971, 103.783207),
-  infoWindow: InfoWindow(title: 'National University Hospital'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker tmcMarker = Marker(
-  markerId: MarkerId('Thomson Medical Centre'),
-  position: LatLng(1.325077, 103.841956),
-  infoWindow: InfoWindow(title: 'Thomson Medical Centre'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
