@@ -82,6 +82,24 @@ class Clinic implements EntityBase{
     return id;
   }
 
+  String stringToString(String currentString){
+    if(currentString == "null" || currentString == null){
+      return "XX";
+    }
+    return currentString;
+  }
+
+  Map<String,String> getDetails(){
+    return {
+      'name': stringToString(HCI_NAME),
+      'buildingName': stringToString(BUILDING_NAME),
+      'street': stringToString(BLK_HSE_NO) + " " + stringToString(STREET_NAME),
+      'unit': "#" + stringToString(FLOOR_NO) + "-" + stringToString(UNIT_NO),
+      'phoneNo': stringToString(HCI_TEL),
+      'program': stringToString(CLINIC_PROGRAMME_CODE),
+    };
+  }
+
   Map<String,dynamic> getData(){}
   Map<String,dynamic> getNewData(){}
 

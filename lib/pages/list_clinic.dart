@@ -13,7 +13,7 @@ class ClinicPage extends StatefulWidget {
 class ClinicPageState extends State<ClinicPage> {
   Completer<GoogleMapController> _controller = Completer();
   ClinicController clinicController = new ClinicController();
-
+  List<Clinic> containerClinics = new List<Clinic>();
   Map<MarkerId, Marker> markers = <MarkerId, Marker>{};
   
   @override
@@ -66,6 +66,11 @@ class ClinicPageState extends State<ClinicPage> {
     List<Clinic> clinics = await clinicController.queryClinicByLocation(boundary.northeast.latitude,boundary.northeast.longitude, 
       boundary.southwest.latitude,boundary.southwest.longitude);
 
+    
+
+    setState(() {
+      containerClinics = clinics;
+    });
 
     for(var clinic in clinics){
       Marker newMarker = Marker(
@@ -128,43 +133,38 @@ class ClinicPageState extends State<ClinicPage> {
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 20.0),
         height: 150.0,
-        child: ListView(
+        child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          children: <Widget>[
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipNNrOGQNpPZVtaBXUhbEaBrU83VSP69GV5fqVlw=w426-h240-k-no",
-                  1.279525,
-                  103.835915,
-                  "SGH"),
-            ),
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipMSqJ_54iGyT-_llwsI2uzHad_sJuvPb0ZpGqHv=w408-h306-k-no",
-                  1.293971,
-                  103.783207,
-                  'National University Hospital'),
-            ),
-            SizedBox(width: 10.0),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: _boxes(
-                  "https://lh5.googleusercontent.com/p/AF1QipNNrOGQNpPZVtaBXUhbEaBrU83VSP69GV5fqVlw=w426-h240-k-no",
-                  1.325077,
-                  103.841956,
-                  "Thomson Medical Centre"),
-            ),
-          ],
+          itemCount: containerClinics.length,
+          itemBuilder: (context, position){
+
+            return Card(
+              child: Column(
+                children: <Widget>[
+                  SizedBox(width: 10.0, height: 20.0, ),
+                  SizedBox(
+                        width: 300.0, 
+                        // height: 20.0,
+                        child: _boxes(containerClinics[position]),
+                        ),
+                  
+                    
+                  
+                ],
+              ),
+            );
+            
+          },
         ),
       ),
     );
   }
 
-  Widget _boxes(String _image, double lat, double long, String restaurantName) {
+  Widget _boxes(Clinic clinic) {
+
+    double lat = clinic.LATITUDE;
+    double long  = clinic.LONGITUDE;
+    Map<String,String> clinicDetails = clinic.getDetails();
     return GestureDetector(
       onTap: () {
         _gotoLocation(lat, long);
@@ -180,20 +180,9 @@ class ClinicPageState extends State<ClinicPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
                   Container(
-                    width: 180,
-                    height: 200,
-                    child: ClipRRect(
-                      borderRadius: new BorderRadius.circular(24.0),
-                      child: Image(
-                        fit: BoxFit.fill,
-                        image: NetworkImage(_image),
-                      ),
-                    ),
-                  ),
-                  Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: myDetailsContainer1(restaurantName),
+                      child: createCardsInfo(clinicDetails),
                     ),
                   ),
                 ],
@@ -203,7 +192,16 @@ class ClinicPageState extends State<ClinicPage> {
     );
   }
 
-  Widget myDetailsContainer1(String restaurantName) {
+  Widget createCardsInfo(Map<String,String> clinicDetails) {
+
+    // Map<String,dynamic> clinicDetails
+    // 'name': HCI_NAME,
+    // 'program': CLINIC_PROGRAMME_CODE.split(','),
+    // 'buildingName': BUILDING_NAME,
+    // 'street': BLK_HSE_NO + " " + STREET_NAME,
+    // 'unit': "#" + FLOOR_NO + "-" + UNIT_NO,
+    // 'phoneNo': HCI_TEL,
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
@@ -211,7 +209,7 @@ class ClinicPageState extends State<ClinicPage> {
           padding: const EdgeInsets.only(left: 8.0),
           child: Container(
               child: Text(
-            restaurantName,
+            clinicDetails['name'].toString(),
             style: TextStyle(
                 color: Color(0xff6200ee),
                 fontSize: 24.0,
@@ -225,50 +223,7 @@ class ClinicPageState extends State<ClinicPage> {
           children: <Widget>[
             Container(
                 child: Text(
-              "4.1",
-              style: TextStyle(
-                color: Colors.black54,
-                fontSize: 18.0,
-              ),
-            )),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStar,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-              child: Icon(
-                FontAwesomeIcons.solidStarHalf,
-                color: Colors.amber,
-                size: 15.0,
-              ),
-            ),
-            Container(
-                child: Text(
-              "(946)",
+              clinicDetails['program'].toString(),
               style: TextStyle(
                 color: Colors.black54,
                 fontSize: 18.0,
@@ -279,7 +234,23 @@ class ClinicPageState extends State<ClinicPage> {
         SizedBox(height: 5.0),
         Container(
             child: Text(
-          "American \u00B7 \u0024\u0024 \u00B7 1.6 mi",
+          clinicDetails['buildingName'],
+          style: TextStyle(
+            color: Colors.black54,
+            fontSize: 18.0,
+          ),
+        )),
+        Container(
+            child: Text(
+          clinicDetails['street'],
+          style: TextStyle(
+            color: Colors.black54,
+            fontSize: 18.0,
+          ),
+        )),
+        Container(
+            child: Text(
+          clinicDetails['unit'],
           style: TextStyle(
             color: Colors.black54,
             fontSize: 18.0,
@@ -288,7 +259,7 @@ class ClinicPageState extends State<ClinicPage> {
         SizedBox(height: 5.0),
         Container(
             child: Text(
-          "Closed \u00B7 Opens 17:00 Thu",
+          clinicDetails['phoneNo'],
           style: TextStyle(
               color: Colors.black54,
               fontSize: 18.0,
@@ -352,30 +323,3 @@ Marker tmcMarker = Marker(
     BitmapDescriptor.hueViolet,
   ),
 );
-
-//New York Marker
-
-Marker newyork1Marker = Marker(
-  markerId: MarkerId('clinic1'),
-  position: LatLng(1.347624, 103.744480),
-  infoWindow: InfoWindow(title: 'Healthway Medical (Bukit Batok)'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-Marker newyork2Marker = Marker(
-  markerId: MarkerId('newyork2'),
-  position: LatLng(1.346859, 103.692887),
-  infoWindow: InfoWindow(title: 'West Point Clinic'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-);
-/*Marker newyork3Marker = Marker(
-  markerId: MarkerId('newyork3'),
-  position: LatLng(40.719109, -74.000183),
-  infoWindow: InfoWindow(title: 'Le Coucou'),
-  icon: BitmapDescriptor.defaultMarkerWithHue(
-    BitmapDescriptor.hueViolet,
-  ),
-); */
