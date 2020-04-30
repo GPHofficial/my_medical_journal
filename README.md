@@ -13,6 +13,9 @@ Project by Team SEVIIEN
 
 * The Application was made in Flutter using Dart.
 * The Application uses Firebase for Authentication and Cloud Firestore to store,retrieve and sync Data across devices.
+## Screenshots 
+
+<img src="https://user-images.githubusercontent.com/43417744/80745097-58b41f00-8b52-11ea-851d-1e582e4b94dc.png" width="400" height="500">
 
 ## Requirement
  - flutter doctor
