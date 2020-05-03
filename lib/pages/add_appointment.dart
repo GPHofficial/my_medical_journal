@@ -196,8 +196,8 @@ class AddAppointmentState extends State<AddAppointment> {
   }
 
   void bookingAppointment() {
-    String username = "***REMOVED***";
-    String password = "***REMOVED***";
+    String username = "";
+    String password = "";
     final smtpServer = mailgun(username, password);
     final message = new Message()
       ..from = new Address(username, 'Kee Kong')
